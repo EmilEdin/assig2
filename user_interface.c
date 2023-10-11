@@ -30,7 +30,8 @@ void print_menu(void)
 
 char ask_question_menu()
 {
-    print_menu() char answer = ask_question("Select an option" check_letter, (convert_func)string_to_char).char_value;
+    print_menu();
+    char answer = ask_question("Select an option" check_letter, (convert_func)string_to_char).char_value;
     return answer;
 }
 
