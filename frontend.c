@@ -25,7 +25,7 @@ void print_menu(void)
     char *O = "Checkout [O]\n";
     char *Q = "Quit [Q]\n";
 
-    printf("%s%s%s%s%s%s", A, L, D, E, S, P, C, R, +, -, =, O, Q);
+    printf("%s%s%s%s%s%s%s%s%s%s%s%s%s", A, L, D, E, S, P, C, R, +, -, =, O, Q);
 }
 
 char ask_question_menu() {
