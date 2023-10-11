@@ -6,6 +6,14 @@
 #include <string.h>
 #include <stdio.h>
 #include "linked_list.c"
+
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "utils.h"
 #define No_Buckets 17
 
 static bool int_compare(elem_t a, elem_t b) { return a.int_value == b.int_value;}
