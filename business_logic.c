@@ -24,12 +24,12 @@ struct shelf
     char *quantity;
 };
 
-merch_t make_merch(char *name, char *description, int price, ioopm_list_t *list) {
+merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t merch = { .name = name, .description = description, .price = price, .list = list};
   return merch;
 }
 
-merch_t input_merch(void) {
+merch_t *input_merch(void) {
   char *name = ask_question_string("Name:");
   char *desc = ask_question_string("Description:");
   int price = ask_question_int("Write the price:");
@@ -39,12 +39,23 @@ merch_t input_merch(void) {
 
 void add_merch(ioopm_hash_table_t *ht, elem_t key, elem_t value)
 {
-    if (ioopm_hash_table_lookup == false)
+    merch_t *merch = input_merch();
+
+    if (ioopm_hash_table_lookup(ht, ptr_elem(merch->name)) == false)
     {
-        ioopm_hash_table_insert(ht, key, value);
+        ioopm_hash_table_insert(ht, ptr_elem(merch->name), merch_elem(merch));
     }
     else
     {
         printf("This merchandice aleady exists");
     }
+}
+
+int stock = 0;
+
+void remove_merch(ioopm_hash_table_t *ht, elem_t key)
+{
+    ioopm_hash_table_remove(ht, key);
+    stock--;
+    return stock;
 }

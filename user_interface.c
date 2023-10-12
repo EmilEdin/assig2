@@ -61,7 +61,7 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         char answer = ask_question_menu();
         if (answer == 'A')
         {
-            db_siz = add_item_to_db(db, db_siz);
+            add_merch(ht_merch);
         }
         else if (answer == 'T')
         {
