@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <ctype.h>
 
+bool string_eq(elem_t arg1, elem_t arg2) {
+  return strcmp(arg1.string_value, arg2.string_value);
+}
+
 void print_menu(void)
 {
     char *A = "Add Merchandise [A]\n";
@@ -48,13 +52,14 @@ char ask_question_menu()
     return answer;
 }
 
-void event_loop(item_t *db, int db_siz)
+
+void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
 {
     bool flag = true;
     while (flag)
     {
         char answer = ask_question_menu();
-        if (answer == 'L')
+        if (answer == 'A')
         {
             db_siz = add_item_to_db(db, db_siz);
         }
@@ -82,6 +87,9 @@ void event_loop(item_t *db, int db_siz)
 }
 
 int main()
-{
-    event_loop();
+{   
+    ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_eq, NULL);
+    ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_eq, NULL);
+
+    event_loop(ht_merch, ht_stock);
 }

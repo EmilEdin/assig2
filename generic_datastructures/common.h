@@ -2,16 +2,19 @@
 
 #define int_elem(x) (elem_t) { .int_value=(x) }
 #define ptr_elem(x) (elem_t) { .string_value=(x) }
+#define merch_elem(x) (elem_t) { .merch=(x) }
 
 
-typedef struct merch ioopm_merch_t;
+typedef struct merch merch_t;
+typedef struct shelf shelf_t;
 
 
 typedef union { 
   int   int_value;
   char *string_value;
   void *void_value;
-  ioopm_merch_t *merch;
+  merch_t *merch;
+  shelf_t *shelf;
 } elem_t;
 
 

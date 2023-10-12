@@ -10,7 +10,6 @@
 #include <ctype.h>
 
 
-
 struct merch 
 {
     char *name;
@@ -19,5 +18,33 @@ struct merch
     ioopm_list_t *list;
 };
 
+struct shelf
+{
+    char *shelf;
+    char *quantity;
+};
 
+merch_t make_merch(char *name, char *description, int price, ioopm_list_t *list) {
+  merch_t merch = { .name = name, .description = description, .price = price, .list = list};
+  return merch;
+}
 
+merch_t input_merch(void) {
+  char *name = ask_question_string("Name:");
+  char *desc = ask_question_string("Description:");
+  int price = ask_question_int("Write the price:");
+
+  return make_merch(name, desc, price, ioopm_linked_list_create(NULL));
+}
+
+void add_merch(ioopm_hash_table_t *ht, elem_t key, elem_t value)
+{
+    if (ioopm_hash_table_lookup == false)
+    {
+        ioopm_hash_table_insert(ht, key, value);
+    }
+    else
+    {
+        printf("This merchandice aleady exists");
+    }
+}
