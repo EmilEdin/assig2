@@ -51,9 +51,7 @@ void add_merch(ioopm_hash_table_t *ht, elem_t key, elem_t value)
     }
 }
 
-int stock = 0;
-
-void remove_merch(ioopm_hash_table_t *ht, elem_t key)
+void remove_merch(ioopm_hash_table_t *ht, elem_t key, int stock)
 {
     ioopm_hash_table_remove(ht, key);
     stock--;
