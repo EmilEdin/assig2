@@ -106,17 +106,7 @@ void edit_db(item_t *items, int db_siz) {
   }
 }
 
-bool check_letter(char *input_string) {
-    if (strlen(input_string) > 1) {
-        return false;
-    } else if (isdigit(input_string[0])) {
-        return false;
-    } else if (input_string[0] == 'L' || input_string[0] == 'l' || input_string[0] == 'T' || input_string[0] == 't' || input_string[0] == 'R' || input_string[0] == 'r' || input_string[0] == 'G' || input_string[0] == 'g' || input_string[0] == 'H' || input_string[0] == 'h' || input_string[0] == 'A'|| input_string[0] == 'a') {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 char string_to_char(char *str) {
     return toupper(*str);

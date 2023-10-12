@@ -28,10 +28,23 @@ void print_menu(void)
     printf("%s%s%s%s%s%s%s%s%s%s%s%s%s", A, L, D, E, S, P, C, R, Ad, Su, Ca, O, Q);
 }
 
+bool check_letter(char *input_string) {
+    if (strlen(input_string) > 1) {
+        return false;
+    } else if (isdigit(input_string[0])) {
+        return false;
+    } else if (input_string[0] == 'L' || input_string[0] == 'l' || input_string[0] == 'T' || input_string[0] == 't' || input_string[0] == 'R' || input_string[0] == 'r' || input_string[0] == 'G' || input_string[0] == 'g' || input_string[0] == 'H' || input_string[0] == 'h' || input_string[0] == 'A'|| input_string[0] == 'a') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 char ask_question_menu()
 {
     print_menu();
-    char answer = ask_question("Select an option" check_letter, (convert_func)string_to_char).char_value;
+    char answer = ask_question("Select an option", check_letter (convert_func), string_to_char).char_value;
     return answer;
 }
 
