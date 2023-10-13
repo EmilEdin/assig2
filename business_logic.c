@@ -21,12 +21,13 @@ struct merch
 struct shelf
 {
     char *shelf;
-    char *quantity;
+    int quantity;
 };
 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t merch = { .name = name, .description = description, .price = price, .list = list};
-  return merch;
+  merch_t *t = &merch;
+  return t;
 }
 
 merch_t *input_merch(void) {
@@ -51,10 +52,17 @@ void add_merch(ioopm_hash_table_t *ht, elem_t key, elem_t value)
     }
 }
 
-void remove_merch(ioopm_hash_table_t *ht, elem_t key, int stock)
+void remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, elem_t key)
 {
-    ioopm_hash_table_remove(ht, key);
-    stock--;
-    return stock;
+    ask_question_string("Which item would you genocidealy destroy?");
+    if (ask_question_string("Are you sure?") == ('y' || 'Y')) {
+        if (ioopm_hash_table_remove(ht_merch, key).success == true && ioopm_hash_table_remove(ht_stock, key).success == true) {
+        } else {
+            printf("Merchandice does not exist");        
+        }
+    } else {}
 }
-// Sidalol
+
+void edit_merch() {
+    
+}

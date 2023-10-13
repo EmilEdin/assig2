@@ -63,13 +63,13 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         {
             add_merch(ht_merch);
         }
-        else if (answer == 'T')
+        else if (answer == 'L')
         {
-            db_siz = remove_item_from_db(db, db_siz);
+            remove_merch(ht_merch, ht_stock);
         }
         else if (answer == 'R')
         {
-            edit_db(db, db_siz);
+            remove
         }
         else if (answer == 'H')
         {
