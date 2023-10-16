@@ -1,6 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 #include <stdbool.h>
+
 typedef union { 
   int   int_value;
   float float_value;

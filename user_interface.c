@@ -13,6 +13,11 @@ bool string_eq(elem_t arg1, elem_t arg2) {
   return strcmp(arg1.string_value, arg2.string_value);
 }
 
+char string_to_char(char *str) {
+    return toupper(*str);
+}
+
+
 void print_menu(void)
 {
     char *A = "Add Merchandise [A]\n";
@@ -48,7 +53,7 @@ bool check_letter(char *input_string) {
 char ask_question_menu()
 {
     print_menu();
-    char answer = ask_question("Select an option", check_letter (convert_func), string_to_char).char_value;
+    char answer = ask_question("Select an option", check_letter, (convert_func) string_to_char).string_value;
     return answer;
 }
 
@@ -61,7 +66,8 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         char answer = ask_question_menu();
         if (answer == 'A')
         {
-            add_merch(ht_merch);
+            
+            add_merch(ht_merch, merch_elem(input_merch()));
         }
         else if (answer == 'L')
         {
@@ -91,5 +97,6 @@ int main()
     ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_eq, NULL);
     ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_eq, NULL);
 
+    make_merch()
     event_loop(ht_merch, ht_stock);
 }

@@ -38,31 +38,29 @@ merch_t *input_merch(void) {
   return make_merch(name, desc, price, ioopm_linked_list_create(NULL));
 }
 
-void add_merch(ioopm_hash_table_t *ht, elem_t key, elem_t value)
+bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
 {
-    merch_t *merch = input_merch();
 
-    if (ioopm_hash_table_lookup(ht, ptr_elem(merch->name)) == false)
+    if (ioopm_hash_table_lookup(ht_merch, ptr_elem(merch->name)).success == false)
     {
-        ioopm_hash_table_insert(ht, ptr_elem(merch->name), merch_elem(merch));
+        ioopm_hash_table_insert(ht_merch, ptr_elem(merch->name), merch_elem(merch));
+        return true;
     }
     else
     {
-        printf("This merchandice aleady exists");
+        return false;
     }
 }
-
+/*
 void remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, elem_t key)
 {
     ask_question_string("Which item would you genocidealy destroy?");
     if (ask_question_string("Are you sure?") == ('y' || 'Y')) {
         if (ioopm_hash_table_remove(ht_merch, key).success == true && ioopm_hash_table_remove(ht_stock, key).success == true) {
+            printf("successfully removed");
         } else {
             printf("Merchandice does not exist");        
         }
     } else {}
 }
-
-void edit_merch() {
-    
-}
+*/
