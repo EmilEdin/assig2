@@ -59,20 +59,23 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
 } 
 
 
-
 bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question)
 {
     if (ask_question_string("Are you sure?")[0] == ('y' || 'Y')) {
-        if (ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question)).success == true 
-            && ioopm_hash_table_remove(ht_stock, ptr_elem(ask_question)).success == true) {
-            return true;
+        ioopm_option_t t_merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(ask_question));
+        ioopm_option_t t_stock = ioopm_hash_table_lookup(ht_merch, ptr_elem(ask_question));
+        if ((t_merch.success) == false || (t_stock.success) == false) {
+            return false;
         } else {
-            return false;        
+            ioopm_linked_list_destroy(t_merch.value.merch->list);
+            free(t_merch.value.merch);
+            
+
+            return true;
         }
     } else {
         return false;
     }
-
 }
 
 
