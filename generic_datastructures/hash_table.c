@@ -8,47 +8,10 @@
 #include "linked_list.h"
 
 
-#define No_Buckets 17
 
 static bool int_compare(elem_t a, elem_t b) { return a.int_value == b.int_value;}
 
-typedef struct entry entry_t;
 
-struct entry
-{
-  elem_t key;       // holds the key
-  elem_t value;   // holds the value
-  entry_t *next; // points to the next entry (possibly NULL)
-};
-
-struct hash_table
-{
-  entry_t *buckets[No_Buckets];
-  hash_function hash_fun;
-  ioopm_predicate eq_fun;
-};
-
- typedef struct option ioopm_option_t;
-
- struct option
- {
-   bool success;
-   elem_t value;
- };
-
-struct link
-{
-    elem_t element;
-    ioopm_link_t *next;
-};
-
-struct list
-{
-    ioopm_link_t *first;
-    ioopm_link_t *last;
-    size_t size; // Added field to store the number of elements in the linked list.
-    ioopm_eq_function equal_fun;
-};
 
 
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)

@@ -9,58 +9,10 @@
 #include "generic_datastructures/hash_table.h"
 #include "generic_datastructures/linked_list.h"
 #include "generic_utils/utils.h"
+#include "business_logic.h"
 
-#define No_Buckets 17
 
-typedef struct entry entry_t;
-typedef struct option ioopm_option_t;
 
-struct entry
-{
-  elem_t key;       // holds the key
-  elem_t value;   // holds the value
-  entry_t *next; // points to the next entry (possibly NULL)
-};
-
-struct hash_table
-{
-  entry_t *buckets[No_Buckets];
-  hash_function hash_fun;
-  ioopm_predicate eq_fun;
-};
-
-struct option
-{
-  bool success;
-  elem_t value;
-};
-
-struct link
-{
-    elem_t element;
-    ioopm_link_t *next;
-};
-
-struct list
-{
-    ioopm_link_t *first;
-    ioopm_link_t *last;
-    size_t size; // Added field to store the number of elements in the linked list.
-};
-
-struct merch 
-{
-    char *name;
-    char *description;
-    int price;
-    ioopm_list_t *list;
-};
-
-struct shelf
-{
-    char *shelf;
-    int quantity;
-};
 
 static bool value_equiv(elem_t key_ignored, elem_t value, void *arg, bool x)
 {

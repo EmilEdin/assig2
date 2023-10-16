@@ -5,20 +5,6 @@
 #include "common.h"
 
 
-struct link
-{
-    elem_t element;
-    ioopm_link_t *next;
-};
-
-struct list
-{
-    ioopm_link_t *first;
-    ioopm_link_t *last;
-    size_t size; // Added field to store the number of elements in the linked list.
-    ioopm_eq_function equal_fun;
-};
-
 ioopm_list_t *ioopm_linked_list_create(ioopm_eq_function equal_fun)
 {
     ioopm_list_t *new_list = calloc(1, sizeof(ioopm_list_t));

@@ -19,11 +19,6 @@
  */
 
 
-typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
-typedef struct link ioopm_link_t;
-typedef bool(*ioopm_int_predicate)(elem_t value, void *extra);
-typedef void(*ioopm_apply_int_function)(elem_t *value, void *extra);
-
 
 /// @brief Creates a new empty list
 /// @return an empty linked list
