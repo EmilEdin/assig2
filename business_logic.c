@@ -10,11 +10,13 @@
 #include <ctype.h>
 
 
- 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
-  merch_t merch = { .name = name, .description = description, .price = price, .list = list};
-  merch_t *t = &merch;
-  return t;
+  merch_t *merch = calloc(1, sizeof(merch_t));
+  merch->name = name;
+  merch->description = description;
+  merch->price = price;
+  merch->list = list;
+  return merch;
 }
 
 merch_t *input_merch(void) {
