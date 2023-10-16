@@ -92,12 +92,11 @@ void test_add_merch() {
     bool same_merch_2 = add_merch(ht_merch, merch_2);
     CU_ASSERT_FALSE(same_merch_2);
     
-    // Free first merch 
-    ht_merch_destroy(ht_merch);
     // Free second merch
     ioopm_linked_list_destroy(merch_2->list);
     free(merch_2);
-    // Free hash tables
+    
+    ioopm_ht_merch_destroy(ht_merch);
     
 }
 

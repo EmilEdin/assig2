@@ -53,24 +53,27 @@ static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_linked_list_destroy(all_merchs);
 }
 
-void ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
+void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
     merch_linked_destroy(ht_merch);
     ioopm_hash_table_destroy(ht_merch);
 } 
 
 
-/*
+
 bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question)
 {
-    if (ask_question_string("Are you sure?") == ('y' || 'Y')) {
+    if (ask_question_string("Are you sure?")[0] == ('y' || 'Y')) {
         if (ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question)).success == true 
             && ioopm_hash_table_remove(ht_stock, ptr_elem(ask_question)).success == true) {
             return true;
         } else {
             return false;        
         }
-    } else {}
+    } else {
+        return false;
+    }
+
 }
-*/
+
 
 

@@ -35,7 +35,7 @@ bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch);
 
 /// @brief Destroy the hash table with merch
 /// @param ht_merch The merch hash_table
-void ht_merch_destroy(ioopm_hash_table_t *ht_merch);
+void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
 
 
 
