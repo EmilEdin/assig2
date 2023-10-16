@@ -5,7 +5,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
-#include "linked_list.c"
+#include "linked_list.h"
+
 
 #define No_Buckets 17
 
@@ -34,6 +35,20 @@ struct hash_table
    bool success;
    elem_t value;
  };
+
+struct link
+{
+    elem_t element;
+    ioopm_link_t *next;
+};
+
+struct list
+{
+    ioopm_link_t *first;
+    ioopm_link_t *last;
+    size_t size; // Added field to store the number of elements in the linked list.
+    ioopm_eq_function equal_fun;
+};
 
 
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)

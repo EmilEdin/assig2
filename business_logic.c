@@ -24,6 +24,14 @@ struct shelf
     int quantity;
 };
 
+ typedef struct option ioopm_option_t;
+
+ struct option
+ {
+   bool success;
+   elem_t value;
+ };
+ 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t merch = { .name = name, .description = description, .price = price, .list = list};
   merch_t *t = &merch;

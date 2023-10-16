@@ -1,4 +1,11 @@
 #pragma once
+#include <stdlib.h>
+#include <assert.h>
+#include <stdbool.h>
+#include "generic_datastructures/linked_list.h"
+#include "generic_datastructures/hash_table.h"
+#include "generic_datastructures/common.h"
+#include <stdio.h>
 
 /**
  * @file hash_table.h
@@ -13,6 +20,7 @@
  * @see $CANVAS_OBJECT_REFERENCE$/assignments/gb54499f3b7b264e3af3b68c756090f52
  */
 
+typedef struct merch merch_t;
 /// @brief Make a merch struct
 /// @param name Name of the item
 /// @param description The description of the item

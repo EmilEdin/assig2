@@ -1,5 +1,5 @@
 #pragma once
-
+#include <stdbool.h>
 #define int_elem(x) (elem_t) { .int_value=(x) }
 #define ptr_elem(x) (elem_t) { .string_value=(x) }
 #define merch_elem(x) (elem_t) { .merch=(x) }

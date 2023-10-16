@@ -1,6 +1,6 @@
 
-#include "generic_datastructures/common.h"
 #include <CUnit/Basic.h>
+#include "generic_datastructures/common.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -111,10 +111,6 @@ int string_to_int(elem_t str) {
 }
 */
 
-// If the strings are numbers
-int string_to_int(elem_t str) {
-  return atoi(str.string_value);
-}
 
 
 int init_suite(void) {
@@ -136,8 +132,8 @@ void test_add_merch() {
     merch_t *merch = make_merch("Fotboll", "En boll", 100, ioopm_linked_list_create(NULL));
     bool new_merch = add_merch(ht_merch, merch);
     CU_ASSERT_TRUE(new_merch);
-    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht_merch, "Fotboll").success);
-    CU_ASSERT_EQUAL(ioopm_hash_table_values(ht_merch)->first->element.merch->price == 100);
+    CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht_merch, ptr_elem("Fotboll")).success);
+    CU_ASSERT_EQUAL(ioopm_hash_table_values(ht_merch)->first->element.merch->price, 100);
     CU_ASSERT_TRUE(strcmp(ioopm_hash_table_values(ht_merch)->first->element.merch->description, "En boll"));
     // Trying to add an existing merch
     bool same_merch = add_merch(ht_merch, merch);
@@ -145,8 +141,10 @@ void test_add_merch() {
     merch_t *merch_2 = make_merch("Fotboll", "Lol", 5000, ioopm_linked_list_create(NULL));
     bool same_merch_2 = add_merch(ht_merch, merch_2);
     CU_ASSERT_FALSE(same_merch_2);
-    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht_merch, "Fotboll").success);
+    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht_merch, ptr_elem("Fotboll")).success);
 
+    ioopm_hash_table_destroy(ht_merch);
+    ioopm_hash_table_destroy(ht_stock);
 }
 
 int main() {

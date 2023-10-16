@@ -1,8 +1,8 @@
 #include "linked_list.h"
-#include "iterator.h"
 #include <assert.h>
 #include <stdbool.h>
 #include "string.h"
+#include "common.h"
 
 
 struct link
@@ -247,7 +247,7 @@ void ioopm_linked_list_apply_to_all(ioopm_list_t *list, ioopm_apply_int_function
 }
 
 
-
+/*
 struct iter 
 {
   ioopm_link_t *current;
@@ -263,6 +263,7 @@ ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list)
 
   return result; 
 }
+
 
 void ioopm_iterator_next(ioopm_list_iterator_t *iter)
 {
@@ -283,3 +284,4 @@ void ioopm_iterator_reset(ioopm_list_iterator_t *iter)
 {
   iter->current = iter->list->first;
 }
+*/
