@@ -72,27 +72,34 @@ int clean_suite(void) {
 
 void test_add_merch() {
     ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
-    ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+
     // Adding a new merch
     merch_t *merch = make_merch("Fotboll", "En boll", 100, ioopm_linked_list_create(NULL));
     bool new_merch = add_merch(ht_merch, merch);
+    // Check that it works to insert a new merch into ht_merch
     CU_ASSERT_TRUE(new_merch);
-    /*
     CU_ASSERT_TRUE(ioopm_hash_table_lookup(ht_merch, ptr_elem("Fotboll")).success);
-    CU_ASSERT_EQUAL(ioopm_hash_table_values(ht_merch)->first->element.merch->price, 100);
-    CU_ASSERT_TRUE(strcmp(ioopm_hash_table_values(ht_merch)->first->element.merch->description, "En boll"));
+
+    ioopm_list_t *list_of_merchs = ioopm_hash_table_values(ht_merch);
+    CU_ASSERT_TRUE(strcmp(list_of_merchs->first->element.merch->description, "En boll") == 0);
+    CU_ASSERT_TRUE(list_of_merchs->first->element.merch->price == 100);
+    ioopm_linked_list_destroy(list_of_merchs);
+    
     // Trying to add an existing merch
     bool same_merch = add_merch(ht_merch, merch);
     CU_ASSERT_FALSE(same_merch);
     merch_t *merch_2 = make_merch("Fotboll", "Lol", 5000, ioopm_linked_list_create(NULL));
     bool same_merch_2 = add_merch(ht_merch, merch_2);
     CU_ASSERT_FALSE(same_merch_2);
-    CU_ASSERT_FALSE(ioopm_hash_table_lookup(ht_merch, ptr_elem("Fotboll")).success);
-    */
+    
+    // Free first merch 
     ioopm_linked_list_destroy(merch->list);
     free(merch);
+    // Free second merch
+    ioopm_linked_list_destroy(merch_2->list);
+    free(merch_2);
+    // Free hash tables
     ioopm_hash_table_destroy(ht_merch);
-    ioopm_hash_table_destroy(ht_stock);
 }
 
 int main() {
