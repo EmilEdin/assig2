@@ -40,16 +40,37 @@ bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
         return false;
     }
 }
+
+
+static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
+    ioopm_list_t *all_merchs = ioopm_hash_table_values(ht_merch);
+    ioopm_link_t *t = all_merchs->first;
+    while (t != NULL) {
+        ioopm_linked_list_destroy(t->element.merch->list);
+        free(t->element.merch);
+        t = t->next;
+    }
+    ioopm_linked_list_destroy(all_merchs);
+}
+
+void ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
+    merch_linked_destroy(ht_merch);
+    ioopm_hash_table_destroy(ht_merch);
+} 
+
+
 /*
-void remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, elem_t key)
+bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question)
 {
-    ask_question_string("Which item would you genocidealy destroy?");
     if (ask_question_string("Are you sure?") == ('y' || 'Y')) {
-        if (ioopm_hash_table_remove(ht_merch, key).success == true && ioopm_hash_table_remove(ht_stock, key).success == true) {
-            printf("successfully removed");
+        if (ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question)).success == true 
+            && ioopm_hash_table_remove(ht_stock, ptr_elem(ask_question)).success == true) {
+            return true;
         } else {
-            printf("Merchandice does not exist");        
+            return false;        
         }
     } else {}
 }
 */
+
+

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "business_logic.h"
 
 bool string_eq(elem_t arg1, elem_t arg2) {
   return strcmp(arg1.string_value, arg2.string_value);
@@ -66,16 +67,15 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         char answer = ask_question_menu();
         if (answer == 'A')
         {
-            
-            add_merch(ht_merch, merch_elem(input_merch()));
+            add_merch(ht_merch, input_merch());
         }
         else if (answer == 'L')
         {
-            remove_merch(ht_merch, ht_stock);
+            
         }
-        else if (answer == 'R')
+        else if (answer == 'D')
         {
-            remove
+            remove_merch(ht_merch, ht_stock, ask_question_string("Which item would you genocidealy destroy?"));
         }
         else if (answer == 'H')
         {

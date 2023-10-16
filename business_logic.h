@@ -33,6 +33,10 @@ merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list
 /// @param merch The merch struct to be added.
 bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch);
 
+/// @brief Destroy the hash table with merch
+/// @param ht_merch The merch hash_table
+void ht_merch_destroy(ioopm_hash_table_t *ht_merch);
+
 
 
 
