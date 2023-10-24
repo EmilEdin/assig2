@@ -10,8 +10,8 @@
 #include <ctype.h>
 #include "business_logic.h"
 
-bool string_eq(elem_t arg1, elem_t arg2) {
-  return strcmp(arg1.string_value, arg2.string_value);
+int string_to_int(elem_t str) {
+  return atoi(str.string_value);
 }
 
 char string_to_char(char *str) {
@@ -43,7 +43,7 @@ bool check_letter(char *input_string) {
         return false;
     } else if (isdigit(input_string[0])) {
         return false;
-    } else if (input_string[0] == 'L' || input_string[0] == 'l' || input_string[0] == 'T' || input_string[0] == 't' || input_string[0] == 'R' || input_string[0] == 'r' || input_string[0] == 'G' || input_string[0] == 'g' || input_string[0] == 'H' || input_string[0] == 'h' || input_string[0] == 'A'|| input_string[0] == 'a') {
+    } else if (input_string[0] == 'A' || input_string[0] == 'L' || input_string[0] == 'D') {
         return true;
     } else {
         return false;
@@ -54,8 +54,8 @@ bool check_letter(char *input_string) {
 char ask_question_menu()
 {
     print_menu();
-    char answer = ask_question("Select an option", check_letter, (convert_func) string_to_char).string_value;
-    return answer;
+    char *answer = ask_question("Select an option", check_letter, (convert_func) string_to_char).string_value;
+    return answer[0];
 }
 
 
@@ -71,19 +71,11 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         }
         else if (answer == 'L')
         {
-            
+            list_merchandise(ht_merch);
         }
         else if (answer == 'D')
         {
             remove_merch(ht_merch, ht_stock, ask_question_string("Which item would you genocidealy destroy?"));
-        }
-        else if (answer == 'H')
-        {
-            list_db(db, db_siz);
-        }
-        else if (answer == 'G')
-        {
-            printf("Not yet implemented!\n");
         }
         else
         {
@@ -94,9 +86,9 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
 
 int main()
 {   
-    ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_eq, NULL);
-    ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_eq, NULL);
+    ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+    ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
 
-    make_merch()
     event_loop(ht_merch, ht_stock);
+    return 0;
 }
