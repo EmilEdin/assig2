@@ -46,7 +46,7 @@ bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
         return false;
     }
 }
-
+// Should be in interface
 void list_merchandise(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
     ioopm_link_t *current = list_of_merchs->first;

@@ -91,7 +91,31 @@ void test_add_merch() {
     CU_ASSERT_FALSE(same_merch_2);
     
     ioopm_ht_merch_destroy(ht_merch);
-    
+}
+
+void test_remove_merch(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  
+  // Remove merchs
+  bool removed = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Klubba"));
+  bool removed_2 = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"));
+  bool removed_3 = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"));
+  bool removed_4 = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Hejsan"));
+  CU_ASSERT_TRUE(removed);
+  CU_ASSERT_TRUE(removed_2);
+  CU_ASSERT_FALSE(removed_3);
+  CU_ASSERT_FALSE(removed_4);
+  
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_table_destroy(ht_stock);
+
 }
 
 int main() {
@@ -116,6 +140,7 @@ int main() {
   // copy a line below and change the information
   if (
     (CU_add_test(my_test_suite, "Test add_merch", test_add_merch) == NULL) || 
+    (CU_add_test(my_test_suite, "Test add_merch", test_remove_merch) == NULL) || 
     0
   )
     {
