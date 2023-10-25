@@ -75,7 +75,9 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         }
         else if (answer == 'D')
         {
-            remove_merch(ht_merch, ht_stock, ask_question_string("Sure?"), ask_question_string("Which item would you genocidealy destroy?"));
+            char *question_remove = ask_question_string("Which item would you genocidealy destroy?");
+            char *sure = ask_question_string("Sure?");
+            remove_merch(ht_merch, ht_stock, sure, question_remove);
         }
         else if (answer == 'C')
         {
