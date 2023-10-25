@@ -50,14 +50,14 @@ bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
 void list_merchandise(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
     ioopm_link_t *current = list_of_merchs->first;
-    int i = 0;
-    while (current != NULL && i < 20) {
-        printf("%d: %s", i, current->element.string_value);
+    int i = 1;
+    while (current != NULL && i <= 20) {
+        printf("%d: %s\n", i, current->element.string_value);
         current = current->next;
     }
     while (current != NULL) {
         char *answer = ask_question_string("Continue listing?");
-        if (answer[0] == ('N' || 'n')) {
+        if (answer[0] == 'N' || answer[0] == 'n') {
             free(answer);
             int i = 0;
             while (current != NULL && i < 20) {
@@ -91,14 +91,15 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
 } 
 
 
-bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question)
+bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *ask_question)
 {
+    if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
+        ioopm_option_t t_merch = ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question));
+        ioopm_option_t t_stock = ioopm_hash_table_remove(ht_stock, ptr_elem(ask_question));
 
-    if (ask_question[0] == ('y' || 'Y')) {
-        ioopm_option_t t_merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(ask_question));
-        ioopm_option_t t_stock = ioopm_hash_table_lookup(ht_merch, ptr_elem(ask_question));
-        if ((t_merch.success) == false || (t_stock.success) == false) {
+        if ((t_merch.success) == false && (t_stock.success) == false) {
             free(ask_question);
+            free(ask_question_confirm);
             return false;
         } else {
             ioopm_linked_list_destroy(t_merch.value.merch->list);
@@ -107,13 +108,17 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ch
             free(t_merch.value.merch);
             
             free(ask_question);
+            free(ask_question_confirm);
             return true;
         }
     } else {
         free(ask_question);
+        free(ask_question_confirm);
         return false;
     }
 }
+
+
 
 
 

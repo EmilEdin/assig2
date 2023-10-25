@@ -6,6 +6,7 @@ typedef union {
   int   int_value;
   float float_value;
   char *string_value;
+  char char_value;
 } answer_t;
 typedef bool(*check_func)(char *);
 typedef answer_t(*convert_func)(char *);

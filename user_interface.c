@@ -54,15 +54,15 @@ bool check_letter(char *input_string) {
 char ask_question_menu()
 {
     print_menu();
-    char *answer = ask_question("Select an option", check_letter, (convert_func) string_to_char).string_value;
-    return answer[0];
+    char answer = ask_question("Select an option", check_letter, (convert_func) string_to_char).char_value;
+    return answer;
 }
 
 
 void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
 {
     bool flag = true;
-    while (flag)
+    while (flag == true)
     {
         char answer = ask_question_menu();
         if (answer == 'A')
@@ -75,10 +75,14 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
         }
         else if (answer == 'D')
         {
-            remove_merch(ht_merch, ht_stock, ask_question_string("Which item would you genocidealy destroy?"));
+            remove_merch(ht_merch, ht_stock, ask_question_string("Sure?"), ask_question_string("Which item would you genocidealy destroy?"));
         }
-        else
+        else if (answer == 'C')
         {
+            printf("here");
+            flag = false;
+
+        } else {
             flag = false;
         }
     }
