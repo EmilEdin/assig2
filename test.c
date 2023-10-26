@@ -157,8 +157,7 @@ void test_replenish_stock(void) {
   ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
   ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
   
-  show_stock(ht_merch, strdup("Fotboll"));
-  
+  CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 0);
   // Add merchs
   merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
   merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
@@ -167,10 +166,12 @@ void test_replenish_stock(void) {
   add_merch(ht_merch, merch_2);
   add_merch(ht_merch, merch_3);
 
+
+
   replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 5);
   
   replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 5);
-  /*
+
   // Test so if storage id exist but another merch is already there it returns false
   CU_ASSERT_FALSE(replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 2));
   // Test so that the merch exists
@@ -184,12 +185,14 @@ void test_replenish_stock(void) {
     CU_ASSERT_TRUE(check);
   }
   
-  CU_ASSERT_EQUAL(show_stock, 50);
+  CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 50);
+  
   replenish(ht_merch, ht_stock, strdup("L5"), strdup("Fotboll"), 5);
+  replenish(ht_merch, ht_stock, strdup("L5"), strdup("Fotboll"), 5);
+  
   replenish(ht_merch, ht_stock, strdup("A5"), strdup("Fotboll"), 10);
-  CU_ASSERT_EQUAL(show_stock, 65);
-  */
-
+  CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 70);
+  
   ioopm_ht_merch_destroy(ht_merch);
   ioopm_hash_stock_destroy(ht_stock);
 

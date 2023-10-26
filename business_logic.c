@@ -9,6 +9,41 @@
 #include <stdio.h>
 #include <ctype.h>
 
+
+// Destroy ht_stock
+/*
+static void entry_stock_destroy(entry_t *entry) {
+  // Cache the next pointer
+    entry_t *next = entry->next;
+    free(entry);
+  while (next != NULL) {
+   
+    free(next->value.string_value);
+    free(next);
+    next = next->next;
+  }
+}
+*/
+static void entry_stock_destroy(entry_t *entry) {
+    entry_t *current = entry;
+    while (current != NULL) {
+        entry_t *next = current->next;
+        if (current->value.string_value != NULL) {
+            free(current->value.string_value);
+        }
+        free(current);
+        current = next;
+    }
+}
+
+void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht) {
+  // TODO 
+  for (int i = 0; i < No_Buckets; i++) {
+    entry_stock_destroy(ht->buckets[i]);
+  }
+  free(ht);
+}
+
 // Destroy ht_merch
 static void merch_links_destroy(ioopm_link_t *link) {
   // Cache the next pointer
@@ -17,7 +52,7 @@ static void merch_links_destroy(ioopm_link_t *link) {
   free(link->element.shelf);
   free(link);
   if (next != NULL) {
-    links_destroy(next);
+    merch_links_destroy(next);
   }
 }
 
@@ -48,29 +83,6 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_hash_table_destroy(ht_merch);
 } 
 
-// Destroy ht_stock
-static void entry_stock_destroy(entry_t *entry) {
-  // Cache the next pointer
-  entry_t *next = entry->next;
-  if (next == NULL) {
-    free(entry);
-  } else {
-    free(entry->key.string_value);
-    free(entry->value.string_value);
-    free(entry);
-  }
-  if (next != NULL) {
-    entry_stock_destroy(next); // Destroy every link recursively untill we hit next == NULL
-  }
-}
-
-void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht) {
-  // TODO 
-  for (int i = 0; i < No_Buckets; i++) {
-    entry_stock_destroy(ht->buckets[i]);
-  }
-  free(ht);
-}
 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t *merch = calloc(1, sizeof(merch_t));
@@ -218,8 +230,8 @@ int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
             int quantity = merch_shelf->element.shelf->quantity;
             counter = counter + quantity;
             printf("Shelf: %s, Quantity: %d", shelf, quantity);
+            merch_shelf = merch_shelf->next;
         }
-        
     }
     free(given_merch);
     return counter;
@@ -229,9 +241,7 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
     ioopm_option_t shelf = ioopm_hash_table_lookup(ht_stock, ptr_elem(storage_id));
     if (shelf.success == true) {
         if (strcmp(shelf.value.string_value, given_merch) == 0) {
-            // Shelf with same merch already exists. Remove the merch, add the quantity 
             ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
-            // Since we just update the quantity, to insert the new one we need to free the name or we duplicate the merch name strdup.
             
             ioopm_link_t *merch_list = merch.value.merch->list->first;
             while (merch_list != NULL) {
@@ -245,6 +255,8 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
                 }
                 merch_list = merch_list->next;
             }
+        free(storage_id);
+        free(given_merch);
             
         } else {
             free(given_merch);
@@ -254,9 +266,12 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
     } else {
         ioopm_option_t merch_2 = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
         
-        ioopm_hash_table_insert(ht_stock, ptr_elem(storage_id), ptr_elem(given_merch));
 
         if (merch_2.success == true) {
+    
+            
+            ioopm_hash_table_insert(ht_stock, ptr_elem(storage_id), ptr_elem(given_merch));
+            
             ioopm_list_t *merch_list_2 = merch_2.value.merch->list;
                    
             // Nu har vi hittat slutet på listan, lägg till ny shelf
@@ -264,7 +279,6 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
             new_shelf->quantity = items;
             new_shelf->shelf = storage_id;
             ioopm_linked_list_append(merch_list_2, shelf_elem(new_shelf));
-            free(given_merch);
             
             return true;
 
