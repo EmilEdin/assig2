@@ -9,7 +9,64 @@
 #include <stdio.h>
 #include <ctype.h>
 
+// Destroy ht_merch
+void merch_links_destroy(ioopm_link_t *link) {
+  // Cache the next pointer
+  ioopm_link_t *next = link->next;
+  free(link->element.shelf->shelf);
+  free(link->element.shelf);
+  free(link);
+  if (next != NULL) {
+    links_destroy(next);
+  }
+}
 
+void ioopm_linked_merch_destroy(ioopm_list_t *list) {
+    if (list->first == NULL && list->last == NULL) {
+        free(list);
+    } else {
+        merch_links_destroy(list->first);
+        free(list);
+    }
+}
+
+static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
+    ioopm_list_t *all_merchs = ioopm_hash_table_values(ht_merch);
+    ioopm_link_t *t = all_merchs->first;
+    while (t != NULL) {
+        ioopm_linked_merch_destroy(t->element.merch->list);
+        free(t->element.merch->name);
+        free(t->element.merch->description);
+        free(t->element.merch);
+        t = t->next;
+    }
+    ioopm_linked_list_destroy(all_merchs);
+}
+
+void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
+    merch_linked_destroy(ht_merch);
+    ioopm_hash_table_destroy(ht_merch);
+} 
+
+// Destroy ht_stock
+void entry_stock_destroy(entry_t *entry) {
+  // Cache the next pointer
+  entry_t *next = entry->next;
+  free(entry->key);
+  free(entry->value);
+  free(entry);
+  if (next != NULL) {
+    entry_destroy(next); // Destroy every link recursively untill we hit next == NULL
+  }
+}
+
+void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht) {
+  // TODO 
+  for (int i = 0; i < No_Buckets; i++) {
+    entry_stock_destroy(ht->buckets[i]);
+  }
+  free(ht);
+}
 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t *merch = calloc(1, sizeof(merch_t));
@@ -72,24 +129,6 @@ void list_merchandise(ioopm_hash_table_t *ht_merch) {
     ioopm_linked_list_destroy(list_of_merchs);
     
 }
-
-static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
-    ioopm_list_t *all_merchs = ioopm_hash_table_values(ht_merch);
-    ioopm_link_t *t = all_merchs->first;
-    while (t != NULL) {
-        ioopm_linked_list_destroy(t->element.merch->list);
-        free(t->element.merch->name);
-        free(t->element.merch->description);
-        free(t->element.merch);
-        t = t->next;
-    }
-    ioopm_linked_list_destroy(all_merchs);
-}
-
-void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
-    merch_linked_destroy(ht_merch);
-    ioopm_hash_table_destroy(ht_merch);
-} 
 
 
 bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *ask_question)
