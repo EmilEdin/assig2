@@ -21,6 +21,14 @@
  */
 
 
+/// @brief Make a merch struct
+/// @param ht ht stock
+void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht);
+
+/// @brief Make a merch struct
+/// @param ht_merch ht merch
+void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
+
 /// @brief Add a merch
 /// @returns returns a merch_t struct
 merch_t *input_merch(void);

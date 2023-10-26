@@ -43,7 +43,7 @@ bool check_letter(char *input_string) {
         return false;
     } else if (isdigit(input_string[0])) {
         return false;
-    } else if (input_string[0] == 'A' || input_string[0] == 'L' || input_string[0] == 'D' || input_string[0] == 'E' || input_string[0] == 'S' || input_string[0] == 'Q') {
+    } else if (input_string[0] == 'A' || input_string[0] == 'L' || input_string[0] == 'D' || input_string[0] == 'E' || input_string[0] == 'S' || input_string[0] == 'P' || input_string[0] == 'Q') {
         return true;
     } else {
         return false;
@@ -105,7 +105,9 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
             char *shelf = ask_question_shelf("Which shelf?");
             char *merch = ask_question_string("Which merch would u wan increase stock for?");
             int items = ask_question_int("Number of items to add? >1");
-            replenish(ht_merch, ht_stock, shelf, merch, items);
+            if (replenish(ht_merch, ht_stock, shelf, merch, items) == false) {
+                printf("Error! \n");
+            }
             
         } else {
             flag = false;

@@ -114,7 +114,7 @@ void test_remove_merch(void) {
   CU_ASSERT_FALSE(removed_4);
   
   ioopm_ht_merch_destroy(ht_merch);
-  ioopm_hash_table_destroy(ht_stock);
+  ioopm_hash_stock_destroy(ht_stock);
 
 }
 
@@ -150,7 +150,7 @@ void test_edit_merch(void) {
   
   
   ioopm_ht_merch_destroy(ht_merch);
-  ioopm_hash_table_destroy(ht_stock);
+  ioopm_hash_stock_destroy(ht_stock);
 }
 
 void test_replenish_stock(void) {
@@ -159,9 +159,21 @@ void test_replenish_stock(void) {
   
   show_stock(ht_merch, strdup("Fotboll"));
   
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  merch_t *merch_3 = make_merch(strdup("David"), strdup("Människa"), 1, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  add_merch(ht_merch, merch_3);
+
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 5);
+
   ioopm_ht_merch_destroy(ht_merch);
-  ioopm_hash_table_destroy(ht_stock);
+  ioopm_hash_stock_destroy(ht_stock);
+
 }
+
 
 int main() {
 
