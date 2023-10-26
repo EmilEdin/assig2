@@ -68,3 +68,26 @@ char *ask_question_string(char *question)
 {
   return ask_question(question, not_empty, (convert_func) strdup).string_value;
 }
+
+bool is_shelf(char *str) {
+    int length = strlen(str);
+    if (length == 1) {
+        return false;
+    }
+    if (isalpha(str[0])) {
+        for(int i = 1; i < length; i++) {
+            if (isdigit(str[i])) {
+            }
+            else {
+                return false;
+            }
+        }
+    return true;
+   
+    }
+return false; 
+}
+
+char *ask_question_shelf(char *question) {
+  return ask_question(question, is_shelf, (convert_func) strdup).string_value;
+}

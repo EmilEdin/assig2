@@ -17,4 +17,6 @@ bool not_empty(char *str);
 bool is_number(char *str);
 int ask_question_int(char *question);
 char *ask_question_string(char *question);
+bool is_shelf(char *str);
+char *ask_question_shelf(char *question);
 #endif

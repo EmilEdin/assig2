@@ -52,9 +52,25 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
 /// @returns returns a boolean
 bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *ask_question);
 
+/// @brief edits a merch
+/// @param ht_merch The merch hash_table
+/// @param ht_stock The ht stock 
+/// @param ask_question Give a question
+void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *item_to_edit, char *new_name, char *new_desc, int new_price);
 
+/// @brief shows stock for merch
+/// @param ht_merch The merch hash_table
+/// @param ht_stock The ht stock 
+/// @param given_merch the given merch to show stock for
+void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 
-
+/// @brief edits a merch
+/// @param ht_merch The merch hash_table
+/// @param ht_stock The ht stock 
+/// @param storage_id the shelf
+/// @param given_merch the given merch to show stock for
+/// @param items number of items to add
+void replenish(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items);
 
 
 

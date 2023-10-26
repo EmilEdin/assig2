@@ -54,6 +54,7 @@ void list_merchandise(ioopm_hash_table_t *ht_merch) {
     while (current != NULL && i <= 20) {
         printf("%d: %s\n", i, current->element.string_value);
         current = current->next;
+        i = i + 1;
     }
     while (current != NULL) {
         char *answer = ask_question_string("Continue listing?");
@@ -95,13 +96,17 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ch
 {
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         ioopm_option_t t_merch = ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question));
-        ioopm_option_t t_stock = ioopm_hash_table_remove(ht_stock, ptr_elem(ask_question));
 
-        if ((t_merch.success) == false && (t_stock.success) == false) {
+        if ((t_merch.success) == false) {
             free(ask_question);
             free(ask_question_confirm);
             return false;
         } else {
+            ioopm_link_t *merch_stock_list = t_merch.value.merch->list->first;
+            while (merch_stock_list != NULL) {
+                ioopm_hash_table_remove(ht_stock, ptr_elem(merch_stock_list->element.string_value));
+                merch_stock_list = merch_stock_list->next;
+            }
             ioopm_linked_list_destroy(t_merch.value.merch->list);
             free(t_merch.value.merch->name);
             free(t_merch.value.merch->description);
@@ -118,7 +123,96 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ch
     }
 }
 
+void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *question_edit, char *name_edit, char *desc_edit, int new_price) {
+    if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
+        ioopm_option_t merch_edit = ioopm_hash_table_remove(ht_merch, ptr_elem(question_edit));
+        // Before changing name and desc, free the original name and desc
+        free(merch_edit.value.merch->name);
+        free(merch_edit.value.merch->description);
 
+        merch_edit.value.merch->name = name_edit;
+        merch_edit.value.merch->description = desc_edit;
+        merch_edit.value.merch->price = new_price;
+        ioopm_hash_table_insert(ht_merch, ptr_elem(name_edit), merch_elem(merch_edit.value.merch));
+        
+        // Put all the shelf_t stocks from list into the key_stocks char ** to find it in ht_stock
+        ioopm_list_t *merch_list = merch_edit.value.merch->list;
+        char **stock_keys = calloc(1, sizeof(char *) * ioopm_linked_list_size(merch_list));
+        int counter = 0;
+        ioopm_link_t *merch_link = merch_list->first;
+        // Get all stocks from merch linked_list to stock_keys string array
+        while (merch_link != NULL) {
+            stock_keys[counter] = merch_link->element.shelf->shelf;
+            counter = counter + 1;
+            merch_link = merch_link->next;
+        }
+        // Now update the new name for every stock the merch is in
+        for (int i = 0; i < counter; i++) {
+            ioopm_hash_table_insert(ht_stock, ptr_elem(stock_keys[i]), ptr_elem(name_edit));
+        }
+        free(stock_keys);
+        free(ask_question_confirm);
+        free(question_edit);
+
+
+    } else {
+        free(ask_question_confirm);
+        free(question_edit);
+        free(name_edit);
+        free(desc_edit);
+    }
+}
+
+void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
+    ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+    if (merch.success == false) {
+        printf("Error\n");
+    } else {
+        ioopm_link_t *merch_shelf = merch.value.merch->list->first;
+        while (merch_shelf != NULL) {
+            char *shelf = merch_shelf->element.shelf->shelf;
+            int quantity = merch_shelf->element.shelf->quantity;
+            printf("Shelf: %s, Quantity: %d", shelf, quantity);
+        }
+        
+    }
+    free(given_merch);
+}
+
+void replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {
+    ioopm_option_t shelf = ioopm_hash_table_lookup(ht_stock, ptr_elem(storage_id));
+    if (shelf.success == true) {
+        if (strcmp(shelf.value.string_value, given_merch) == 0) {
+            // Shelf with same merch already exists. Remove the merch, add the quantity then insert the merch again
+            ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+            ioopm_link_t *merch_list = merch.value.merch->list->first;
+            while (merch_list != NULL) {
+                if (strcmp(merch_list->element.shelf->shelf, storage_id) == 0) {
+                    merch_list->element.shelf->quantity = merch_list->element.shelf->quantity + items;
+                    ioopm_hash_table_insert(ht_merch, ptr_elem(given_merch), merch_elem(merch.value.merch));
+                    return true;
+                }
+                merch_list = merch_list->next;
+            }
+        } else {
+            return false;
+        } 
+    } else {
+        ioopm_hash_table_insert(ht_stock, ptr_elem(storage_id), ptr_elem(given_merch));
+        ioopm_option_t merch_2 = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+        if (merch_2.success == true) {
+            ioopm_link_t *merch_list_2 = merch_2.value.merch->list->first;
+            while (merch_list_2 != NULL) {
+                merch_list_2 = merch_list_2->next;
+            }
+            // Bestäm här om man ska allokera minne på heapen för structen shelf_t o hur man freea senare.
+            merch_list_2->next = 
+        } else {
+            return false;
+        }
+
+    }
+}
 
 
 

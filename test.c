@@ -70,7 +70,7 @@ int clean_suite(void) {
   return 0;
 }
 
-void test_add_merch() {
+void test_add_merch(void) {
     ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
 
     // Adding a new merch
@@ -118,6 +118,51 @@ void test_remove_merch(void) {
 
 }
 
+void test_edit_merch(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  merch_t *merch_3 = make_merch(strdup("David"), strdup("Människa"), 1, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  add_merch(ht_merch, merch_3);
+  
+  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"), strdup("Kvarg"), strdup("Mat"), 369696);
+  bool kvarg_removed = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Kvarg"));
+  bool try_to_remove_prev_name = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"));
+  CU_ASSERT_TRUE(kvarg_removed);
+  CU_ASSERT_FALSE(try_to_remove_prev_name);
+
+  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("David"), strdup("Fot"), strdup("Mat"), 369696);
+  
+  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Fot"), strdup("Arm"), strdup("Mat"), 369696);
+  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Arm"), strdup("Banan"), strdup("Mat"), 369696);
+  // Try to add a merch that exists
+  
+  merch_t *merch_same = make_merch(strdup("Banan"), strdup("Lol"), 5000, ioopm_linked_list_create(NULL));
+  bool same_merch = add_merch(ht_merch, merch_same);
+  CU_ASSERT_FALSE(same_merch);
+  bool banan_removed = remove_merch(ht_merch, ht_stock, strdup("y"), strdup("Banan"));
+  CU_ASSERT_TRUE(banan_removed);
+  
+  
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_table_destroy(ht_stock);
+}
+
+void test_replenish_stock(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  
+  show_stock(ht_merch, strdup("Fotboll"));
+  
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_table_destroy(ht_stock);
+}
+
 int main() {
 
   // First we try to set up CUnit, and exit if we fail
@@ -140,7 +185,9 @@ int main() {
   // copy a line below and change the information
   if (
     (CU_add_test(my_test_suite, "Test add_merch", test_add_merch) == NULL) || 
-    (CU_add_test(my_test_suite, "Test add_merch", test_remove_merch) == NULL) || 
+    (CU_add_test(my_test_suite, "Test remove_merch", test_remove_merch) == NULL) || 
+    (CU_add_test(my_test_suite, "Test edit_merch", test_edit_merch) == NULL) || 
+    (CU_add_test(my_test_suite, "Test replenish_and_show_stock", test_replenish_stock) == NULL) || 
     0
   )
     {
