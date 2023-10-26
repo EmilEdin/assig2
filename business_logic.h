@@ -70,7 +70,7 @@ void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 /// @param storage_id the shelf
 /// @param given_merch the given merch to show stock for
 /// @param items number of items to add
-void replenish(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items);
+bool replenish(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items);
 
 
 

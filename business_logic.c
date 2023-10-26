@@ -52,11 +52,11 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
 void entry_stock_destroy(entry_t *entry) {
   // Cache the next pointer
   entry_t *next = entry->next;
-  free(entry->key);
-  free(entry->value);
+  free(entry->key.string_value);
+  free(entry->value.string_value);
   free(entry);
   if (next != NULL) {
-    entry_destroy(next); // Destroy every link recursively untill we hit next == NULL
+    entry_stock_destroy(next); // Destroy every link recursively untill we hit next == NULL
   }
 }
 
@@ -218,7 +218,7 @@ void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
     free(given_merch);
 }
 
-void replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {
+bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {
     ioopm_option_t shelf = ioopm_hash_table_lookup(ht_stock, ptr_elem(storage_id));
     if (shelf.success == true) {
         if (strcmp(shelf.value.string_value, given_merch) == 0) {
@@ -244,13 +244,19 @@ void replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
             while (merch_list_2 != NULL) {
                 merch_list_2 = merch_list_2->next;
             }
-            // Bestäm här om man ska allokera minne på heapen för structen shelf_t o hur man freea senare.
-            merch_list_2->next = 
+            // Nu har vi hittat slutet på listan, lägg till ny shelf
+            shelf_t *new_shelf = calloc(1, sizeof(shelf_t));
+            new_shelf->quantity = items;
+            new_shelf->shelf = storage_id;
+            merch_list_2->next->element.shelf = new_shelf;
+            return true;
+
         } else {
             return false;
         }
 
     }
+    return false;
 }
 
 
