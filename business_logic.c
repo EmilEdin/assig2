@@ -135,7 +135,7 @@ void list_merchandise(ioopm_hash_table_t *ht_merch) {
             free(answer);
             int i = 0;
             while (current != NULL && i < 20) {
-                printf("%d: %s", i, current->element.string_value);
+                printf("%d: %s\n", i, current->element.string_value);
                 current = current->next;
             }
         } else {
