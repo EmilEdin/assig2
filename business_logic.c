@@ -229,7 +229,7 @@ int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
             char *shelf = merch_shelf->element.shelf->shelf;
             int quantity = merch_shelf->element.shelf->quantity;
             counter = counter + quantity;
-            printf("Shelf: %s, Quantity: %d", shelf, quantity);
+            printf("Shelf: %s, Quantity: %d\n", shelf, quantity);
             merch_shelf = merch_shelf->next;
         }
     }
