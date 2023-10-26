@@ -168,6 +168,27 @@ void test_replenish_stock(void) {
   add_merch(ht_merch, merch_3);
 
   replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 5);
+  
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 5);
+  /*
+  // Test so if storage id exist but another merch is already there it returns false
+  CU_ASSERT_FALSE(replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 2));
+  // Test so that the merch exists
+  CU_ASSERT_FALSE(replenish(ht_merch, ht_stock, strdup("A10"), strdup("spökdata"), 2));
+  CU_ASSERT_FALSE(replenish(ht_merch, ht_stock, strdup("G50"), strdup("spökdataa"), 2));
+
+  // Now edge cases done, regular tests
+  
+  for (int i = 0; i < 10; i++) {
+    bool check = replenish(ht_merch, ht_stock, strdup("B10"), strdup("Fotboll"), 5);
+    CU_ASSERT_TRUE(check);
+  }
+  
+  CU_ASSERT_EQUAL(show_stock, 50);
+  replenish(ht_merch, ht_stock, strdup("L5"), strdup("Fotboll"), 5);
+  replenish(ht_merch, ht_stock, strdup("A5"), strdup("Fotboll"), 10);
+  CU_ASSERT_EQUAL(show_stock, 65);
+  */
 
   ioopm_ht_merch_destroy(ht_merch);
   ioopm_hash_stock_destroy(ht_stock);

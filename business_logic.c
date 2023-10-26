@@ -206,8 +206,9 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
     }
 }
 
-void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
+int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
     ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+    int counter = 0;
     if (merch.success == false) {
         printf("Error\n");
     } else {
@@ -215,11 +216,13 @@ void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
         while (merch_shelf != NULL) {
             char *shelf = merch_shelf->element.shelf->shelf;
             int quantity = merch_shelf->element.shelf->quantity;
+            counter = counter + quantity;
             printf("Shelf: %s, Quantity: %d", shelf, quantity);
         }
         
     }
     free(given_merch);
+    return counter;
 }
 
 bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {

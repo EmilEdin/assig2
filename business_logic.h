@@ -70,7 +70,7 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
 /// @param ht_merch The merch hash_table
 /// @param ht_stock The ht stock 
 /// @param given_merch the given merch to show stock for
-void show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
+int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 
 /// @brief edits a merch
 /// @param ht_merch The merch hash_table

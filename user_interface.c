@@ -105,8 +105,13 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
             char *shelf = ask_question_shelf("Which shelf?");
             char *merch = ask_question_string("Which merch would u wan increase stock for?");
             int items = ask_question_int("Number of items to add? >1");
-            if (replenish(ht_merch, ht_stock, shelf, merch, items) == false) {
+
+            if (items < 1) {
+                printf("Too few items!");
+            } else if (replenish(ht_merch, ht_stock, shelf, merch, items) == false) {
                 printf("Error! \n");
+            } else {
+
             }
             
         } else {
