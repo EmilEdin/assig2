@@ -179,7 +179,9 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ch
 }
 
 void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *question_edit, char *name_edit, char *desc_edit, int new_price) {
+    // We presupose that the given merch does exist and the new name does not already exist in ht
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
+        // Here we use remove, free the name and desc and reinsert the merch with new name etc
         ioopm_option_t merch_edit = ioopm_hash_table_remove(ht_merch, ptr_elem(question_edit));
         // Before changing name and desc, free the original name and desc
         free(merch_edit.value.merch->name);
