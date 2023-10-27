@@ -182,7 +182,9 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
     // We presupose that the given merch does exist and the new name does not already exist in ht
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         // Here we use remove, free the name and desc and reinsert the merch with new name etc
+        
         ioopm_option_t merch_edit = ioopm_hash_table_remove(ht_merch, ptr_elem(question_edit));
+        
         // Before changing name and desc, free the original name and desc
         free(merch_edit.value.merch->name);
         free(merch_edit.value.merch->description);
@@ -204,13 +206,18 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
             merch_link = merch_link->next;
         }
         // Now update the new name for every stock the merch is in
+        
         for (int i = 0; i < counter; i++) {
-            ioopm_hash_table_insert(ht_stock, ptr_elem(stock_keys[i]), ptr_elem(name_edit));
+            ioopm_option_t t = ioopm_hash_table_lookup(ht_stock, ptr_elem(stock_keys[i]));
+            assert(t.success == true);
+            free(t.value.string_value);
+            char *same_name_but_different_memory_block = strdup(name_edit);
+            ioopm_hash_table_insert(ht_stock, ptr_elem(stock_keys[i]), ptr_elem(same_name_but_different_memory_block));
         }
         free(stock_keys);
         free(ask_question_confirm);
         free(question_edit);
-
+        
 
     } else {
         free(ask_question_confirm);

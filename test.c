@@ -156,6 +156,8 @@ void test_edit_merch(void) {
 void test_replenish_stock(void) {
   ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
   ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  // Test for bug
+ 
   
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 0);
   // Add merchs
@@ -169,16 +171,12 @@ void test_replenish_stock(void) {
 
 
   replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 1);
-  //replenish(ht_merch, ht_stock, strdup("C16"), strdup("Klubba"), 1);
-  //replenish(ht_merch, ht_stock, strdup("P16"), strdup("Klubba"), 1);
-  //replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 1);
+  replenish(ht_merch, ht_stock, strdup("C16"), strdup("Klubba"), 1);
+  replenish(ht_merch, ht_stock, strdup("P16"), strdup("Klubba"), 1);
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 1);
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Klubba")), 4);
   
-  /* Här har vi problem, När vi försöker edit_merch på en vara som vi har lagt till i ht_stock med replenish */
-  // Så får vi minnesläcka
-  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Klubba"), strdup("TV"), strdup("En teve"), 120);
-
-
+  
   // Test so if storage id exist but another merch is already there it returns false
   CU_ASSERT_FALSE(replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 2));
   // Test so that the merch exists
@@ -201,13 +199,13 @@ void test_replenish_stock(void) {
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 70);
   
   // Test so edit and show stock will show the edited one.
-  //edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"), strdup("TV"), strdup("En teve"), 120);
+  edit_merchandise(ht_merch, ht_stock, strdup("y"), strdup("Fotboll"), strdup("TV"), strdup("En teve"), 120);
   // Test so with changed name Fotboll does not exist as merch or have stock
-  /*
+  
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 0);
   // But TV will have the fotboll stocks
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("TV")), 70);
-  */
+  
   ioopm_ht_merch_destroy(ht_merch);
   ioopm_hash_stock_destroy(ht_stock);
 

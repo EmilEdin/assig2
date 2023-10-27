@@ -7,4 +7,5 @@ gcc -g -Wall generic_datastructures/hash_table.c generic_datastructures/linked_l
 // For trying user interface program game
 gcc -g -Wall generic_datastructures/hash_table.c generic_datastructures/linked_list.c generic_utils/utils.c business_logic.c user_interface.c -o assig2
 
-multipass exec primary -- bash                             
+multipass exec primary -- bash            
+
