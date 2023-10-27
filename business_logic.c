@@ -56,7 +56,7 @@ static void merch_links_destroy(ioopm_link_t *link) {
   }
 }
 
-static void ioopm_linked_merch_destroy(ioopm_list_t *list) {
+void ioopm_linked_merch_destroy(ioopm_list_t *list) {
     if (list->first == NULL && list->last == NULL) {
         free(list);
     } else {
@@ -65,7 +65,7 @@ static void ioopm_linked_merch_destroy(ioopm_list_t *list) {
     }
 }
 
-static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
+void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *all_merchs = ioopm_hash_table_values(ht_merch);
     ioopm_link_t *t = all_merchs->first;
     while (t != NULL) {
@@ -159,10 +159,15 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ch
         } else {
             ioopm_link_t *merch_stock_list = t_merch.value.merch->list->first;
             while (merch_stock_list != NULL) {
-                ioopm_hash_table_remove(ht_stock, ptr_elem(merch_stock_list->element.string_value));
+                // När man tar bort ett ht_stock entry måste man frigöra namnet merch då det är independent pekare på minnet
+                // Medan shelf i ht_stock och i ht_merch delar samma minne så då behöver vi inte nu frigöra
+                ioopm_option_t t = ioopm_hash_table_remove(ht_stock, ptr_elem(merch_stock_list->element.shelf->shelf));
+                assert(t.success == true);
+                free(t.value.string_value);
                 merch_stock_list = merch_stock_list->next;
             }
-            ioopm_linked_list_destroy(t_merch.value.merch->list);
+            // Här frigörs även shelf från ht_stock då både det och i ht_merch shelf delar på samma minne
+            ioopm_linked_merch_destroy(t_merch.value.merch->list);
             free(t_merch.value.merch->name);
             free(t_merch.value.merch->description);
             free(t_merch.value.merch);
@@ -206,8 +211,9 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
             merch_link = merch_link->next;
         }
         // Now update the new name for every stock the merch is in
-        
         for (int i = 0; i < counter; i++) {
+            // But first we need to free the previous value name, and in our structure our value names in ht stock
+            // All points to different memory, so we need to keep that promise and for each storage we need to strdup name.
             ioopm_option_t t = ioopm_hash_table_lookup(ht_stock, ptr_elem(stock_keys[i]));
             assert(t.success == true);
             free(t.value.string_value);

@@ -205,6 +205,10 @@ void test_replenish_stock(void) {
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("Fotboll")), 0);
   // But TV will have the fotboll stocks
   CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("TV")), 70);
+  remove_merch(ht_merch, ht_stock, strdup("y"), strdup("TV"));
+  
+  CU_ASSERT_EQUAL(show_stock(ht_merch, strdup("TV")), 0);
+  replenish(ht_merch, ht_stock, strdup("A5"), strdup("TV"), 10);
   
   ioopm_ht_merch_destroy(ht_merch);
   ioopm_hash_stock_destroy(ht_stock);
