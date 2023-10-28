@@ -43,7 +43,7 @@ bool check_letter(char *input_string) {
         return false;
     } else if (isdigit(input_string[0])) {
         return false;
-    } else if (input_string[0] == 'A' || input_string[0] == 'L' || input_string[0] == 'D' || input_string[0] == 'E' || input_string[0] == 'S' || input_string[0] == 'P' || input_string[0] == 'Q') {
+    } else if (input_string[0] == 'A' || input_string[0] == 'L' || input_string[0] == 'D' || input_string[0] == 'E' || input_string[0] == 'S' || input_string[0] == 'P' || input_string[0] == 'C' || input_string[0] == 'R' || input_string[0] == 'Q') {
         return true;
     } else {
         return false;
@@ -61,6 +61,7 @@ char ask_question_menu()
 
 void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
 {
+    int cart_id = 0;
     bool flag = true;
     while (flag == true)
     {
@@ -114,6 +115,8 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
 
             }
             
+        } else if (answer == 'C') {
+            
         } else {
             flag = false;
         }
@@ -129,6 +132,6 @@ int main()
 
     ioopm_ht_merch_destroy(ht_merch);
     ioopm_hash_stock_destroy(ht_stock);
-    
+
     return 0;
 }

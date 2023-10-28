@@ -80,6 +80,28 @@ int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 /// @param items number of items to add
 bool replenish(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items);
 
+/// @brief Creates a new shopping cart in the system.
+/// @param ht_carts The shopping cart hash table.
+/// @param cart_id The identifier for the new cart.
+void create_cart(ioopm_hash_table_t *ht_carts, int cart_id);
+
+/// @brief Adds a quantity of merchandise to a specific shopping cart.
+/// @param ht_merch The merchandise hash table.
+/// @param ht_carts The shopping cart hash table.  
+/// @param cart_id The identifier of the cart to which merchandise is added.
+/// @param given_merch The name of the merchandise to add to the cart.
+/// @param num_of_items The number of items to add to the cart.
+/// @return true if the merchandise was successfully added to the cart; false otherwise.
+bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items);
+
+/// @brief Removes zero or more items of a merchandise from a particular cart. 
+/// @param ht_merch The merchandise hash table.
+/// @param ht_carts The shopping cart hash table.
+/// @param cart_id The identifier of the cart from which merchandise is removed.
+/// @param given_merch The name of the merchandise to remove from the cart.
+/// @param num_of_items The number of items to remove from the cart.
+/// @return true if the merchandise was successfully removed from the cart; false otherwise.
+bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items);
 
 
 

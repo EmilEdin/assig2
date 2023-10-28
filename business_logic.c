@@ -314,14 +314,44 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
     return false;
 }
 
+
+
+static int string_to_int(elem_t str) {
+  int counter = 0;
+  int value = 0;
+  char *st = str.string_value;
+  while (st[counter] != '\0') {
+    value = value + st[counter];
+    counter = counter + 1;
+  }
+  return value;
+}
+
 void create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
     cart_t  *cart = calloc(1, sizeof(cart_t));
-    cart->ht_cart_items = ioopm_hash_table_create(NULL, NULL);
+    cart->ht_cart_items = ioopm_hash_table_create(string_to_int, NULL);
     cart->total_cost = 0;
     ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
 }
 
-// void remove cart
+void remove_cart(ioopm_hash_table_t *ht_carts, int cart_id, int num_of_items, ioopm_hash_table_t *ht_merch, char *ask_question_confirm) {
+    if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
+        ioopm_option_t value_to_remove = ioopm_hash_table_remove(ht_carts, int_elem(cart_id));
+        cart_t *cart_to_remove = value_to_remove.value.cart;
+        ioopm_list_t *merch_list = ioopm_hash_table_keys(cart_to_remove->ht_cart_items);
+        for(int i = 0; i < ioopm_linked_list_size(merch_list); i++) {
+            ioopm_option_t option_to_restore = ioopm_hash_table_lookup(ht_merch, ioopm_linked_list_get(merch_list, i));
+            merch_t *merch_to_restore = option_to_restore.value.merch;
+            ioopm_option_t lookup_result = ioopm_hash_table_lookup(cart_to_remove->ht_cart_items, ptr_elem(merch_to_restore->name));
+            merch_to_restore->items_tracker = merch_to_restore->items_tracker + lookup_result.value.int_value;
+        }
+        free(merch_list);
+        free(cart_to_remove);
+    }
+    else {
+        free(ask_question_confirm);
+    }
+}
 
 bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
     ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
@@ -352,6 +382,10 @@ bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int
         // First time insert of that given merch
         ioopm_hash_table_insert(cart_varukorg, ptr_elem(given_merch), int_elem(num_of_items));
         merch.value.merch->items_tracker = merch.value.merch->items_tracker - num_of_items;
+
+        // Add the total cost
+        cart.value.cart->total_cost = cart.value.cart->total_cost + num_of_items * merch.value.merch->price;
+
         return true;  
     } else {
         merch.value.merch->items_tracker = merch.value.merch->items_tracker - num_of_items;
@@ -365,16 +399,51 @@ bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int
         while (link_keys != NULL) {
             if (strcmp(link_keys->element.string_value, given_merch) == 0) {
                 free(link_keys->element.string_value);
-                ioopm_linked_list_destroy(list_of_keys);
                 break;
             }
             link_keys = link_keys->next;
         }
-        
+        ioopm_linked_list_destroy(list_of_keys);
+        // Add the total cost
+        cart.value.cart->total_cost = cart.value.cart->total_cost + num_of_items * merch.value.merch->price;
+
         ioopm_hash_table_insert(cart_varukorg, ptr_elem(given_merch), int_elem(num_of_items));
         return true;   
     }
 }
+
+bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
+    ioopm_option_t the_cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
+    if (the_cart.success == false) {
+        printf("Cart not found!\n");
+        return false;
+    }
+    ioopm_hash_table_t *varukorg = the_cart.value.cart->ht_cart_items;
+    ioopm_option_t the_merch = ioopm_hash_table_lookup(varukorg, ptr_elem(given_merch));
+    if (the_merch.success == false) {
+        printf("Given merch not found in cart\n");
+        return false;
+    }
+    if (num_of_items > the_merch.value.int_value) {
+        printf("You try to remove too much items\n");
+        return false;
+    }
+    ioopm_option_t merch_t = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+    if (merch_t.success == false) {
+        printf("Merch does not exist ht_merch\n");
+        return false;
+    }
+    // Decreasee in the varukorg quantity by num of items to remove
+    the_merch.value.int_value = the_merch.value.int_value - num_of_items;
+    // Increase in the merch_t struct the number of items in stock
+    merch_t.value.merch->items_tracker =  merch_t.value.merch->items_tracker + num_of_items;
+
+    // Add the total cost
+    the_cart.value.cart->total_cost = the_cart.value.cart->total_cost + num_of_items * merch_t.value.merch->price;
+    
+    return true;
+}
+
 
 
 
