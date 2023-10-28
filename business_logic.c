@@ -188,7 +188,6 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
     // We presupose that the given merch does exist and the new name does not already exist in ht
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         // Here we use remove, free the name and desc and reinsert the merch with new name etc
-        
         ioopm_option_t merch_edit = ioopm_hash_table_remove(ht_merch, ptr_elem(question_edit));
         
         // Before changing name and desc, free the original name and desc
@@ -318,6 +317,7 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
 void create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
     cart_t  *cart = calloc(1, sizeof(cart_t));
     cart->ht_cart_items = ioopm_hash_table_create(NULL, NULL);
+    cart->total_cost = 0;
     ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
 }
 
