@@ -90,6 +90,7 @@ merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list
   merch->description = description;
   merch->price = price;
   merch->list = list;
+  merch->items_tracker = 0; // Keep track of items used for carts.
   return merch;
 }
 
@@ -262,6 +263,8 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
             while (merch_list != NULL) {
                 if (strcmp(merch_list->element.shelf->shelf, storage_id) == 0) {
                     merch_list->element.shelf->quantity = merch_list->element.shelf->quantity + items;
+                    // Add the struct for carts to
+                    merch.value.merch->items_tracker = merch.value.merch->items_tracker + items;
                     
                     // Free storage id
                     free(storage_id);
@@ -295,6 +298,9 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
             new_shelf->shelf = storage_id;
             ioopm_linked_list_append(merch_list_2, shelf_elem(new_shelf));
             
+            // Add items to cart struct too
+            merch_2.value.merch->items_tracker = merch_2.value.merch->items_tracker + items;
+            
             return true;
 
         } else {
@@ -307,6 +313,67 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
     free(given_merch);
     free(storage_id);
     return false;
+}
+
+void create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
+    cart_t  *cart = calloc(1, sizeof(cart_t));
+    cart->ht_cart_items = ioopm_hash_table_create(NULL, NULL);
+    ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
+}
+
+// void remove cart
+
+bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
+    ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+    ioopm_option_t cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
+    
+    if (cart.success == false) {
+        printf("Cart does not exist!\n");
+        free(given_merch);
+        return false;
+    } 
+    if (merch.success == false) {
+        printf("Merch does not exist!\n");
+        free(given_merch);
+        return false;
+    }  
+    
+    int merch_stock = merch.value.merch->items_tracker;
+    if (merch_stock < num_of_items) {
+        printf("Not enough items to add to cart!\n");
+        free(given_merch);
+        return false;
+    }
+
+    ioopm_hash_table_t *cart_varukorg = cart.value.cart->ht_cart_items;
+    
+    ioopm_option_t varukorg = ioopm_hash_table_lookup(cart_varukorg, ptr_elem(given_merch));
+    if (varukorg.success == false) {
+        // First time insert of that given merch
+        ioopm_hash_table_insert(cart_varukorg, ptr_elem(given_merch), int_elem(num_of_items));
+        merch.value.merch->items_tracker = merch.value.merch->items_tracker - num_of_items;
+        return true;  
+    } else {
+        merch.value.merch->items_tracker = merch.value.merch->items_tracker - num_of_items;
+        num_of_items = num_of_items + varukorg.value.int_value;
+        // Second time, we need to first free the strdup given merch in prev instance before we insert again
+        // Since given merch is key, we need to remove the entry first and reinsert
+        ioopm_list_t *list_of_keys = ioopm_hash_table_keys(cart_varukorg);
+        // Remove it then after we insert it again. Necessary in order to free the key of prev given_merch
+        ioopm_option_t remove_merch_first = ioopm_hash_table_remove(cart_varukorg, ptr_elem(given_merch));
+        ioopm_link_t *link_keys = list_of_keys->first;
+        while (link_keys != NULL) {
+            if (strcmp(link_keys->element.string_value, given_merch) == 0) {
+                free(link_keys->element.string_value);
+                ioopm_linked_list_destroy(list_of_keys);
+                break;
+            }
+            link_keys = link_keys->next;
+        }
+        
+        ioopm_hash_table_insert(cart_varukorg, ptr_elem(given_merch), int_elem(num_of_items));
+        return true;   
+    }
 }
 
 

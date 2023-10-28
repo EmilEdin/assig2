@@ -9,6 +9,7 @@
 #define ptr_elem(x) (elem_t) { .string_value=(x) }
 #define merch_elem(x) (elem_t) { .merch=(x) }
 #define shelf_elem(x) (elem_t) { .shelf=(x) }
+#define cart_elem(x) (elem_t) { .cart=(x) }
 
 
 
@@ -16,12 +17,14 @@ typedef struct merch merch_t;
 typedef struct shelf shelf_t;
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
 typedef struct link ioopm_link_t;
+typedef struct cart cart_t;
 
 struct merch 
 {
     char *name;
     char *description;
     int price;
+    int items_tracker;
     ioopm_list_t *list;
 };
 
@@ -31,12 +34,15 @@ struct shelf
     int quantity;
 };
 
+
+
 typedef union { 
   int   int_value;
   char *string_value;
   void *void_value;
   merch_t *merch;
   shelf_t *shelf;
+  cart_t *cart;
 } elem_t;
 
 
@@ -106,3 +112,8 @@ struct option
   elem_t value;
 };
 
+
+struct cart
+{
+  ioopm_hash_table_t *ht_cart_items;
+};

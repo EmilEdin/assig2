@@ -126,5 +126,9 @@ int main()
     ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
 
     event_loop(ht_merch, ht_stock);
+
+    ioopm_ht_merch_destroy(ht_merch);
+    ioopm_hash_stock_destroy(ht_stock);
+    
     return 0;
 }
