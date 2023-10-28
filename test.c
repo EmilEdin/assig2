@@ -215,14 +215,6 @@ void test_replenish_stock(void) {
 
 }
 
-void test_create_cart(void) {
-
-}
-
-void test_remove_cart(void) {
-
-}
-
 void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
   ioopm_list_t *values = ioopm_hash_table_values(ht_carts);
   ioopm_link_t *cart_ts = values->first;
@@ -232,7 +224,6 @@ void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
     ioopm_link_t *key = merch_keys->first;
 
     while (key != NULL) {
-      printf("Ersdfsdfsdfror\n");
       free(key->element.string_value);
       key = key->next;
     }
@@ -245,6 +236,11 @@ void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
   ioopm_linked_list_destroy(values);
   ioopm_hash_table_destroy(ht_carts);
 }
+
+void test_create_remove_cart(void) {
+
+}
+
 
 void test_add_to_cart(void) {
   ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
@@ -283,7 +279,7 @@ void test_add_to_cart(void) {
 }
 
 void test_remove_from_cart(void) {
-  
+
 }
 
 int main() {
@@ -311,8 +307,7 @@ int main() {
     (CU_add_test(my_test_suite, "Test remove_merch", test_remove_merch) == NULL) || 
     (CU_add_test(my_test_suite, "Test edit_merch", test_edit_merch) == NULL) || 
     (CU_add_test(my_test_suite, "Test replenish_and_show_stock", test_replenish_stock) == NULL) ||
-    (CU_add_test(my_test_suite, "Test create_cart", test_create_cart) == NULL) || 
-    (CU_add_test(my_test_suite, "Test remove_cart", test_remove_cart) == NULL) || 
+    (CU_add_test(my_test_suite, "Test create_remove_cart", test_create_remove_cart) == NULL) || 
     (CU_add_test(my_test_suite, "Test add_to_cart", test_add_to_cart) == NULL) ||
     (CU_add_test(my_test_suite, "Test remove_from_cart", test_remove_from_cart) == NULL) || 
     0
