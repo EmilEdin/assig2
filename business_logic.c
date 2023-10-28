@@ -360,7 +360,7 @@ bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int
         // Since given merch is key, we need to remove the entry first and reinsert
         ioopm_list_t *list_of_keys = ioopm_hash_table_keys(cart_varukorg);
         // Remove it then after we insert it again. Necessary in order to free the key of prev given_merch
-        ioopm_option_t remove_merch_first = ioopm_hash_table_remove(cart_varukorg, ptr_elem(given_merch));
+        ioopm_hash_table_remove(cart_varukorg, ptr_elem(given_merch));
         ioopm_link_t *link_keys = list_of_keys->first;
         while (link_keys != NULL) {
             if (strcmp(link_keys->element.string_value, given_merch) == 0) {
