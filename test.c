@@ -215,29 +215,60 @@ void test_replenish_stock(void) {
 
 }
 
-void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
-  ioopm_list_t *values = ioopm_hash_table_values(ht_carts);
-  ioopm_link_t *cart_ts = values->first;
-  while (cart_ts != NULL) {
-    ioopm_hash_table_t *ht_cart_items = cart_ts->element.cart->ht_cart_items;
-    ioopm_list_t *merch_keys = ioopm_hash_table_keys(ht_cart_items);
-    ioopm_link_t *key = merch_keys->first;
-
-    while (key != NULL) {
-      free(key->element.string_value);
-      key = key->next;
-    }
-    ioopm_linked_list_destroy(merch_keys);
-    ioopm_hash_table_destroy(ht_cart_items);
-    cart_t *current_cart_ts = cart_ts->element.cart;
-    cart_ts = cart_ts->next;
-    free(current_cart_ts);
-  }
-  ioopm_linked_list_destroy(values);
-  ioopm_hash_table_destroy(ht_carts);
-}
-
 void test_create_remove_cart(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_carts = ioopm_hash_table_create(NULL, NULL);
+
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  merch_t *merch_3 = make_merch(strdup("David"), strdup("Människa"), 1, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  add_merch(ht_merch, merch_3);
+
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 20);
+  replenish(ht_merch, ht_stock, strdup("B10"), strdup("Klubba"), 500);
+
+  int cart_id = 0;
+  create_cart(ht_carts, cart_id);
+  cart_id = cart_id + 1;
+  create_cart(ht_carts, cart_id);
+  cart_id = cart_id + 1;
+  create_cart(ht_carts, cart_id);
+  int cart_id_r = 0;
+  ioopm_option_t cart_0 = ioopm_hash_table_lookup(ht_carts, int_elem(0));
+  CU_ASSERT_TRUE(cart_0.success);
+  ioopm_option_t cart_1 = ioopm_hash_table_lookup(ht_carts, int_elem(1));
+  CU_ASSERT_TRUE(cart_1.success);
+  ioopm_option_t cart_2 = ioopm_hash_table_lookup(ht_carts, int_elem(2));
+  CU_ASSERT_TRUE(cart_2.success);
+
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 10);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 100);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 100);
+
+  add_to_cart(ht_merch, ht_carts, 1, strdup("Fotboll"), 10);
+  add_to_cart(ht_merch, ht_carts, 1, strdup("Klubba"), 100);
+  add_to_cart(ht_merch, ht_carts, 2, strdup("Klubba"), 100);
+
+  remove_cart(ht_carts, ht_merch, cart_id_r, strdup("y"));
+  ioopm_option_t cart_0_r = ioopm_hash_table_lookup(ht_carts, int_elem(0));
+  CU_ASSERT_FALSE(cart_0_r.success);
+  cart_id_r = cart_id_r + 1;
+  remove_cart(ht_carts, ht_merch, cart_id_r, strdup("y"));
+  ioopm_option_t cart_1_r = ioopm_hash_table_lookup(ht_carts, int_elem(1));
+  CU_ASSERT_FALSE(cart_1_r.success);
+  cart_id_r = cart_id_r + 1;
+  remove_cart(ht_carts, ht_merch, cart_id_r, strdup("y"));
+  ioopm_option_t cart_2_r = ioopm_hash_table_lookup(ht_carts, int_elem(2));
+  CU_ASSERT_FALSE(cart_2_r.success);
+  
+
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_stock_destroy(ht_stock);
+  hash_table_carts_destroy(ht_carts);
 
 }
 
@@ -262,15 +293,23 @@ void test_add_to_cart(void) {
   add_merch(ht_merch, merch_3);
 
   replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 15);
-  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Klubba"), 500);
+  replenish(ht_merch, ht_stock, strdup("B10"), strdup("Klubba"), 500);
   
   bool success = add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 10);
   bool failure = add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 15);
-  add_to_cart(ht_merch, ht_carts, 0, strdup("En boll"), 15);
+  bool fail = add_to_cart(ht_merch, ht_carts, 0, strdup("En boll"), 15);
   add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 100);
-
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 200);
+  add_to_cart(ht_merch, ht_carts, 1, strdup("Klubba"), 100);
   CU_ASSERT_TRUE(success);
+  CU_ASSERT_FALSE(fail);
   CU_ASSERT_FALSE(failure);
+
+  ioopm_option_t klubba_merch = ioopm_hash_table_lookup(ht_merch, ptr_elem("Klubba"));
+  ioopm_option_t cart = ioopm_hash_table_lookup(ht_carts, int_elem(0));
+  ioopm_option_t klubba_merch_cart = ioopm_hash_table_lookup(cart.value.cart->ht_cart_items, ptr_elem("Klubba"));
+  CU_ASSERT_EQUAL(klubba_merch.value.merch->items_tracker, 100);
+  CU_ASSERT_EQUAL(klubba_merch_cart.value.int_value, 300);
   
 
   ioopm_ht_merch_destroy(ht_merch);
@@ -279,8 +318,93 @@ void test_add_to_cart(void) {
 }
 
 void test_remove_from_cart(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_carts = ioopm_hash_table_create(NULL, NULL);
+
+
+  int cart_id = 0;
+  create_cart(ht_carts, cart_id);
+  cart_id = cart_id + 1;
+  create_cart(ht_carts, cart_id);
+
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  merch_t *merch_3 = make_merch(strdup("David"), strdup("Människa"), 1, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  add_merch(ht_merch, merch_3);
+
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 15);
+  replenish(ht_merch, ht_stock, strdup("B10"), strdup("Klubba"), 500);
+  
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 10);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 15);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("En boll"), 15);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 500);
+
+  CU_ASSERT_TRUE(remove_from_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 500));
+
+
+
+  bool yes = remove_from_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 5);
+  bool yes1 = remove_from_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 10);
+  bool no = remove_from_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 15);
+  CU_ASSERT_TRUE(yes);
+  CU_ASSERT_TRUE(yes1);
+  CU_ASSERT_FALSE(no);
+
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_stock_destroy(ht_stock);
+  hash_table_carts_destroy(ht_carts);
 
 }
+
+void test_checkout(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_carts = ioopm_hash_table_create(NULL, NULL);
+
+  
+  int cart_id = 0;
+  create_cart(ht_carts, cart_id);
+  cart_id = cart_id + 1;
+  create_cart(ht_carts, cart_id);
+
+  // Add merchs
+  merch_t *merch = make_merch(strdup("Fotboll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  merch_t *merch_2 = make_merch(strdup("Klubba"), strdup("Klubba"), 420, ioopm_linked_list_create(NULL));
+  merch_t *merch_3 = make_merch(strdup("David"), strdup("Människa"), 1, ioopm_linked_list_create(NULL));
+  add_merch(ht_merch, merch);
+  add_merch(ht_merch, merch_2);
+  add_merch(ht_merch, merch_3);
+
+  replenish(ht_merch, ht_stock, strdup("A10"), strdup("Fotboll"), 15);
+  replenish(ht_merch, ht_stock, strdup("C10"), strdup("David"), 10);
+  replenish(ht_merch, ht_stock, strdup("G50"), strdup("David"), 10);
+  replenish(ht_merch, ht_stock, strdup("B10"), strdup("Klubba"), 500);
+  
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 100);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 200);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Klubba"), 200);
+  add_to_cart(ht_merch, ht_carts, 0, strdup("Fotboll"), 10);
+  bool ja = add_to_cart(ht_merch, ht_carts, 0, strdup("David"), 10);
+  CU_ASSERT_TRUE(ja);
+  remove_from_cart(ht_merch, ht_carts, 0, strdup("David"), 15);
+  bool fel = add_to_cart(ht_merch, ht_carts, 1, strdup("Klubba"), 200);
+
+  CU_ASSERT_FALSE(fel);
+
+  CU_ASSERT_TRUE(checkout(ht_merch, ht_stock, ht_carts, 0));
+  CU_ASSERT_FALSE(checkout(ht_merch, ht_stock, ht_carts, 0));
+  CU_ASSERT_TRUE(checkout(ht_merch, ht_stock, ht_carts, 1));
+  
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_stock_destroy(ht_stock);
+  hash_table_carts_destroy(ht_carts);
+}
+
 
 int main() {
 
@@ -310,6 +434,7 @@ int main() {
     (CU_add_test(my_test_suite, "Test create_remove_cart", test_create_remove_cart) == NULL) || 
     (CU_add_test(my_test_suite, "Test add_to_cart", test_add_to_cart) == NULL) ||
     (CU_add_test(my_test_suite, "Test remove_from_cart", test_remove_from_cart) == NULL) || 
+    (CU_add_test(my_test_suite, "Test checkout", test_checkout) == NULL) || 
     0
   )
     {

@@ -83,6 +83,27 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_hash_table_destroy(ht_merch);
 } 
 
+void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
+  ioopm_list_t *values = ioopm_hash_table_values(ht_carts);
+  ioopm_link_t *cart_ts = values->first;
+  while (cart_ts != NULL) {
+    ioopm_hash_table_t *ht_cart_items = cart_ts->element.cart->ht_cart_items;
+    ioopm_list_t *merch_keys = ioopm_hash_table_keys(ht_cart_items);
+    ioopm_link_t *key = merch_keys->first;
+
+    while (key != NULL) {
+      free(key->element.string_value);
+      key = key->next;
+    }
+    ioopm_linked_list_destroy(merch_keys);
+    ioopm_hash_table_destroy(ht_cart_items);
+    cart_t *current_cart_ts = cart_ts->element.cart;
+    cart_ts = cart_ts->next;
+    free(current_cart_ts);
+  }
+  ioopm_linked_list_destroy(values);
+  ioopm_hash_table_destroy(ht_carts);
+}
 
 merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list) {
   merch_t *merch = calloc(1, sizeof(merch_t));
@@ -314,8 +335,6 @@ bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char 
     return false;
 }
 
-
-
 static int string_to_int(elem_t str) {
   int counter = 0;
   int value = 0;
@@ -334,7 +353,7 @@ void create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
     ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
 }
 
-void remove_cart(ioopm_hash_table_t *ht_carts, int cart_id, int num_of_items, ioopm_hash_table_t *ht_merch, char *ask_question_confirm) {
+void remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm) {
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         ioopm_option_t value_to_remove = ioopm_hash_table_remove(ht_carts, int_elem(cart_id));
         cart_t *cart_to_remove = value_to_remove.value.cart;
@@ -344,9 +363,17 @@ void remove_cart(ioopm_hash_table_t *ht_carts, int cart_id, int num_of_items, io
             merch_t *merch_to_restore = option_to_restore.value.merch;
             ioopm_option_t lookup_result = ioopm_hash_table_lookup(cart_to_remove->ht_cart_items, ptr_elem(merch_to_restore->name));
             merch_to_restore->items_tracker = merch_to_restore->items_tracker + lookup_result.value.int_value;
+            
         }
-        free(merch_list);
+        ioopm_link_t *merch_link = merch_list->first;
+        while (merch_link != NULL) {
+            free(merch_link->element.string_value);
+            merch_link = merch_link->next;
+        }
+        ioopm_linked_list_destroy(merch_list);
+        ioopm_hash_table_destroy(cart_to_remove->ht_cart_items);
         free(cart_to_remove);
+        free(ask_question_confirm);
     }
     else {
         free(ask_question_confirm);
@@ -416,21 +443,25 @@ bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts
     ioopm_option_t the_cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
     if (the_cart.success == false) {
         printf("Cart not found!\n");
+        free(given_merch);
         return false;
     }
     ioopm_hash_table_t *varukorg = the_cart.value.cart->ht_cart_items;
     ioopm_option_t the_merch = ioopm_hash_table_lookup(varukorg, ptr_elem(given_merch));
     if (the_merch.success == false) {
         printf("Given merch not found in cart\n");
+        free(given_merch);
         return false;
     }
     if (num_of_items > the_merch.value.int_value) {
         printf("You try to remove too much items\n");
+        free(given_merch);
         return false;
     }
     ioopm_option_t merch_t = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
     if (merch_t.success == false) {
         printf("Merch does not exist ht_merch\n");
+        free(given_merch);
         return false;
     }
     // Decreasee in the varukorg quantity by num of items to remove
@@ -440,10 +471,57 @@ bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts
 
     // Add the total cost
     the_cart.value.cart->total_cost = the_cart.value.cart->total_cost + num_of_items * merch_t.value.merch->price;
-    
+    free(given_merch);
     return true;
 }
 
+bool checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, int cart_id) {
+    ioopm_option_t cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
+    if (cart.success == false) {
+        printf("cart does not exist");
+        return false;
+    }
+    
+    ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(cart.value.cart->ht_cart_items);
+    ioopm_link_t *link_merchs = list_of_merchs->first;
+    while (link_merchs != NULL) {
+        ioopm_option_t merch_lookup = ioopm_hash_table_lookup(ht_merch, ptr_elem(link_merchs->element.string_value));
+        ioopm_option_t quantity_lookup = ioopm_hash_table_lookup(cart.value.cart->ht_cart_items, ptr_elem(link_merchs->element.string_value));
+        // Remove merch items from htstock and htmerch
+ 
+        int index_in_list = 0;
+        ioopm_list_t *list_of_shelf = merch_lookup.value.merch->list;
+        ioopm_link_t *the_merch_shelfs = list_of_shelf->first;
+        while (quantity_lookup.value.int_value > 0 && the_merch_shelfs != NULL) {
+            if (quantity_lookup.value.int_value >= the_merch_shelfs->element.shelf->quantity) {
+                // We cache the quantity value, make the_merch_shelfs to point to next, then remove current shelf.
+                int the_merch_shelf_quantity = the_merch_shelfs->element.shelf->quantity;
+                the_merch_shelfs = the_merch_shelfs->next;
+                shelf_t *shelf = ioopm_linked_list_remove(list_of_shelf, index_in_list).shelf;
+                index_in_list = index_in_list + 1;
+                // Here we need to remove it from ht_stock
+                ioopm_option_t merch = ioopm_hash_table_remove(ht_stock, ptr_elem(shelf->shelf));
+                free(merch.value.string_value);
+                free(shelf->shelf);
+                free(shelf);
+                // Decrease the total quantity by the specific shelf quantity
+                quantity_lookup.value.int_value = quantity_lookup.value.int_value - the_merch_shelf_quantity;
+                
+            } else {
+                the_merch_shelfs->element.shelf->quantity = the_merch_shelfs->element.shelf->quantity - quantity_lookup.value.int_value;
+                
+                // Decrease the total quantity by the specific shelf quantity
+                quantity_lookup.value.int_value = quantity_lookup.value.int_value - the_merch_shelfs->element.shelf->quantity;
+                the_merch_shelfs = the_merch_shelfs->next;
+            }
+        }
+        link_merchs = link_merchs->next;
+        
+    }
+    ioopm_linked_list_destroy(list_of_merchs);
+    remove_cart(ht_carts, ht_merch, cart_id, strdup("y"));
+    return true;
+}
 
 
 

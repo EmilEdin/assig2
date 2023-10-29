@@ -127,11 +127,13 @@ int main()
 {   
     ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
     ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+    ioopm_hash_table_t *ht_carts = ioopm_hash_table_create(NULL, NULL);
 
     event_loop(ht_merch, ht_stock);
 
     ioopm_ht_merch_destroy(ht_merch);
     ioopm_hash_stock_destroy(ht_stock);
+    hash_table_carts_destroy(ht_carts);
 
     return 0;
 }
