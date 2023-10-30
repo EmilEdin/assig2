@@ -93,8 +93,8 @@ void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id);
 /// @param ht_carts The shopping cart hash table.
 /// @param ht_carts The shopping cart hash table.  
 /// @param cart_id The identifier for the new cart.
-/// @param ask_question_confirm confirmation 
-void ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm);
+/// @param ask_question_confirm confirmation.
+bool ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm);
 
 /// @brief Adds a quantity of merchandise to a specific shopping cart.
 /// @param ht_merch The merchandise hash table.

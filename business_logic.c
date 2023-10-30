@@ -357,9 +357,13 @@ void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
     ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
 }
 
-void ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm) {
+bool ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm) {
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         ioopm_option_t value_to_remove = ioopm_hash_table_remove(ht_carts, int_elem(cart_id));
+        if (value_to_remove.success == false) {
+            free(ask_question_confirm);
+            return false;
+        }
         cart_t *cart_to_remove = value_to_remove.value.cart;
         ioopm_list_t *merch_list = ioopm_hash_table_keys(cart_to_remove->ht_cart_items);
         for(int i = 0; i < ioopm_linked_list_size(merch_list); i++) {
@@ -378,9 +382,11 @@ void ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merc
         ioopm_hash_table_destroy(cart_to_remove->ht_cart_items);
         free(cart_to_remove);
         free(ask_question_confirm);
+        return true;
     }
     else {
         free(ask_question_confirm);
+        return false;
     }
 }
 
