@@ -64,6 +64,14 @@ char ask_question_menu()
     return answer;
 }
 
+void calculate_cost(ioopm_hash_table_t *ht_carts, int cart_id) {
+    ioopm_option_t cost = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
+    if (cost.success == false) {
+        printf("Cart not found!\n");
+    } else {
+        printf("Total cost: %d", cost.value.cart->total_cost);
+    }
+}
 
 void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts)
 {
@@ -124,8 +132,7 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioop
                 printf("Error! \n");
             } else {}
         } else if (answer == 'C') {
-            int cart_i = ask_question_int("Cart id?");
-            ioopm_create_cart(ht_carts, cart_i);
+            ioopm_create_cart(ht_carts, cart_id);
             cart_id = cart_id + 1;
         } else if (answer == 'R') {
             char *confirm = ask_question_string("Sure?");
@@ -147,7 +154,8 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioop
             int num_items = ask_question_int("Number of items?");
             ioopm_remove_from_cart(ht_merch, ht_carts, id, given_merch, num_items);
         } else if (answer == '=') {
-
+            int id = ask_question_int("Cart id?");
+            calculate_cost(ht_carts, id);
         } else if (answer == 'O') {
             int id = ask_question_int("Cart id?");
             ioopm_checkout(ht_merch, ht_stock, ht_carts, id);

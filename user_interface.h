@@ -25,3 +25,8 @@
 /// @param input_string the input string
 /// @return returns a boolean
 bool check_letter(char *input_string);
+
+/// @brief shows total cost of a cart
+/// @param ht_carts The carts hash_table
+/// @param cart_id The cart id
+void calculate_cost(ioopm_hash_table_t *ht_carts, int cart_id);
