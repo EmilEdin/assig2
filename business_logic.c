@@ -9,6 +9,16 @@
 #include <stdio.h>
 #include <ctype.h>
 
+static int string_to_int(elem_t str) {
+  int counter = 0;
+  int value = 0;
+  char *st = str.string_value;
+  while (st[counter] != '\0') {
+    value = value + st[counter];
+    counter = counter + 1;
+  }
+  return value;
+}
 
 static void entry_stock_destroy(entry_t *entry) {
     entry_t *current = entry;
@@ -336,17 +346,6 @@ bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock,
     free(given_merch);
     free(storage_id);
     return false;
-}
-
-static int string_to_int(elem_t str) {
-  int counter = 0;
-  int value = 0;
-  char *st = str.string_value;
-  while (st[counter] != '\0') {
-    value = value + st[counter];
-    counter = counter + 1;
-  }
-  return value;
 }
 
 void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {

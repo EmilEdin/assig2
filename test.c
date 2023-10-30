@@ -29,7 +29,6 @@ int string_to_int(elem_t str) {
   return value;
 }
 
-
 /*
 // Uses the DJB2 algorithm to hash the string
 int string_to_int(elem_t str) {
@@ -55,8 +54,6 @@ int string_to_int(elem_t str) {
   return value;
 }
 */
-
-
 
 int init_suite(void) {
   // Change this function if you want to do something *before* you
