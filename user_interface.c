@@ -78,6 +78,14 @@ static char ask_question_menu()
     return answer;
 }
 
+merch_t *input_merch(void) {
+  char *name = ask_question_string("Name:");
+  char *desc = ask_question_string("Description:");
+  int price = ask_question_int("Write the price:");
+
+  return make_merch(name, desc, price, ioopm_linked_list_create(NULL));
+}
+
 void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
     ioopm_link_t *current = list_of_merchs->first;

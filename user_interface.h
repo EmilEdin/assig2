@@ -20,6 +20,13 @@
  * @see $CANVAS_OBJECT_REFERENCE$/assignments/gb54499f3b7b264e3af3b68c756090f52
  */
 
+/// @brief Create a new merchandise structure.
+///
+/// This function initializes and returns a new merchandise structure.
+///
+/// @return A pointer to the newly created merchandise structure.
+merch_t *input_merch(void);
+
 /// @brief prints all merch items in the hash table
 /// @param ht_carts The hash_table of merch items
 void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch);

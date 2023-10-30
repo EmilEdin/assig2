@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "user_interface.h"
 
 static int string_to_int(elem_t str) {
   int counter = 0;
@@ -109,14 +110,6 @@ merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list
   return merch;
 }
 
-merch_t *input_merch(void) {
-  char *name = ask_question_string("Name:");
-  char *desc = ask_question_string("Description:");
-  int price = ask_question_int("Write the price:");
-
-  return make_merch(name, desc, price, ioopm_linked_list_create(NULL));
-}
-
 bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
 {
 
@@ -153,8 +146,10 @@ bool ioopm_remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_sto
 
                 return false;
             }
+            cart_m = cart_m->next;
         }
         ioopm_linked_list_destroy(cart_merchs);
+        cart = cart->next;
     }
     ioopm_linked_list_destroy(carts);
     
@@ -281,6 +276,7 @@ bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock,
             }
         free(storage_id);
         free(given_merch);
+        return false;
             
         } else {
             free(given_merch);
@@ -316,9 +312,6 @@ bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock,
         }
 
     }
-    free(given_merch);
-    free(storage_id);
-    return false;
 }
 
 void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
@@ -422,6 +415,12 @@ bool ioopm_add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_cart
 
 bool ioopm_remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
     ioopm_option_t the_cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
+    ioopm_option_t merch_t = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
+    if (merch_t.success == false) {
+        printf("Merch does not exist ht_merch\n");
+        free(given_merch);
+        return false;
+    }
     if (the_cart.success == false) {
         printf("Cart not found!\n");
         free(given_merch);
@@ -436,12 +435,6 @@ bool ioopm_remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht
     }
     if (num_of_items > the_merch.value.int_value) {
         printf("You try to remove too much items\n");
-        free(given_merch);
-        return false;
-    }
-    ioopm_option_t merch_t = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
-    if (merch_t.success == false) {
-        printf("Merch does not exist ht_merch\n");
         free(given_merch);
         return false;
     }

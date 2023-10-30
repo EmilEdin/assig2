@@ -11,9 +11,6 @@
 
 static bool int_compare(elem_t a, elem_t b) { return a.int_value == b.int_value;}
 
-
-
-
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)
 {
   entry_t *new_entry = calloc(1, sizeof(entry_t)); // Allocate memory for the entry

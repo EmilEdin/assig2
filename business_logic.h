@@ -49,13 +49,6 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
 /// @param ht_carts The shopping cart hash table to be destroyed.
 void ioopm_hash_table_carts_destroy(ioopm_hash_table_t *ht_carts);
 
-/// @brief Create a new merchandise structure.
-///
-/// This function initializes and returns a new merchandise structure.
-///
-/// @return A pointer to the newly created merchandise structure.
-merch_t *input_merch(void);
-
 /// @brief Make a merchandise structure.
 ///
 /// This function creates and returns a merchandise structure with the provided information.
