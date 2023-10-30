@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 /**
- * @file hash_table.h
+ * @file user_interface.h
  * @author Eskil Lundegårdh och Emil Edin
  * @date 16 Okt 2023
  * @brief user interface functions

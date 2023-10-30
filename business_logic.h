@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 /**
- * @file hash_table.h
+ * @file business_logic.h
  * @author Eskil Lundegårdh och Emil Edin
  * @date 16 Okt 2023
  * @brief Business logic for the webbackend.

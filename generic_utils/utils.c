@@ -5,7 +5,7 @@ extern char *strdup(const char *);
 #include <ctype.h>
 #include "utils.h"
 
-bool is_number(char *str)
+static bool is_number(char *str)
 {
     for (int i = 0; i < strlen(str); ++i)
     {
@@ -22,6 +22,22 @@ bool is_number(char *str)
         }
     }
     return true;
+}
+
+static int read_string(char *buf, int buf_size)
+{
+    char c;
+    for (int i = 0; i < buf_size; ++i)
+    {
+        c = getchar();
+        if (c == '\n')
+        {
+            buf[i] = '\0';
+            return i;
+        }
+        buf[i] = c;
+    }
+    return buf_size;
 }
 
 answer_t ask_question(char *question, check_func check, convert_func convert)
@@ -43,23 +59,8 @@ int ask_question_int(char *question)
   return answer.int_value; // svaret som ett heltal
 }
 
-int read_string(char *buf, int buf_size)
-{
-    char c;
-    for (int i = 0; i < buf_size; ++i)
-    {
-        c = getchar();
-        if (c == '\n')
-        {
-            buf[i] = '\0';
-            return i;
-        }
-        buf[i] = c;
-    }
-    return buf_size;
-}
 
-bool not_empty(char *str)
+static bool not_empty(char *str)
 {
   return strlen(str) > 0;
 }
@@ -69,7 +70,7 @@ char *ask_question_string(char *question)
   return ask_question(question, not_empty, (convert_func) strdup).string_value;
 }
 
-bool is_shelf(char *str) {
+static bool is_shelf(char *str) {
     int length = strlen(str);
     if (length == 1) {
         return false;
