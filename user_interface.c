@@ -59,7 +59,7 @@ char ask_question_menu()
 }
 
 
-void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
+void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, int cart_id)
 {
     int cart_id = 0;
     bool flag = true;
@@ -116,7 +116,11 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock)
             }
             
         } else if (answer == 'C') {
-            
+            create_cart(ht_carts, cart_id);
+        } else if (answer == 'R') {
+            char *question_remove = ask_question_string("Which cart would you like to destroy?");
+            char *sure = ask_question_string("Sure?");
+            remove_cart(ht_carts, ht_merch, cart_id, sure);
         } else {
             flag = false;
         }
@@ -133,7 +137,7 @@ int main()
 
     ioopm_ht_merch_destroy(ht_merch);
     ioopm_hash_stock_destroy(ht_stock);
-    hash_table_carts_destroy(ht_carts);
+    ioopm_hash_table_carts_destroy(ht_carts);
 
     return 0;
 }

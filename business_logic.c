@@ -67,7 +67,7 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_hash_table_destroy(ht_merch);
 } 
 
-void hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
+void ioopm_hash_table_carts_destroy(ioopm_hash_table_t *ht_carts) {
   ioopm_list_t *values = ioopm_hash_table_values(ht_carts);
   ioopm_link_t *cart_ts = values->first;
   while (cart_ts != NULL) {
@@ -107,7 +107,7 @@ merch_t *input_merch(void) {
   return make_merch(name, desc, price, ioopm_linked_list_create(NULL));
 }
 
-bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
+bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
 {
 
     if (ioopm_hash_table_lookup(ht_merch, ptr_elem(merch->name)).success == false)
@@ -126,7 +126,7 @@ bool add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
     }
 }
 // Should be in interface
-void list_merchandise(ioopm_hash_table_t *ht_merch) {
+void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
     ioopm_link_t *current = list_of_merchs->first;
     int i = 1;
@@ -153,7 +153,7 @@ void list_merchandise(ioopm_hash_table_t *ht_merch) {
 }
 
 
-bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, char *ask_question_confirm, char *ask_question)
+bool ioopm_remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, char *ask_question_confirm, char *ask_question)
 {
     ioopm_list_t *carts = ioopm_hash_table_values(ht_carts);
     ioopm_link_t *cart = carts->first;
@@ -209,7 +209,7 @@ bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, io
     }
 }
 
-void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *question_edit, char *name_edit, char *desc_edit, int new_price) {
+void ioopm_edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *question_edit, char *name_edit, char *desc_edit, int new_price) {
     // We presupose that the given merch does exist and the new name does not already exist in ht
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         // Here we use remove, free the name and desc and reinsert the merch with new name etc
@@ -258,7 +258,7 @@ void edit_merchandise(ioopm_hash_table_t *ht_merch ,ioopm_hash_table_t *ht_stock
     }
 }
 
-int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
+int ioopm_show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
     ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
     int counter = 0;
     if (merch.success == false) {
@@ -277,7 +277,7 @@ int show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
     return counter;
 }
 
-bool replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {
+bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items) {
     ioopm_option_t shelf = ioopm_hash_table_lookup(ht_stock, ptr_elem(storage_id));
     if (shelf.success == true) {
         if (strcmp(shelf.value.string_value, given_merch) == 0) {
@@ -350,14 +350,14 @@ static int string_to_int(elem_t str) {
   return value;
 }
 
-void create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
+void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id) {
     cart_t  *cart = calloc(1, sizeof(cart_t));
     cart->ht_cart_items = ioopm_hash_table_create(string_to_int, NULL);
     cart->total_cost = 0;
     ioopm_hash_table_insert(ht_carts, int_elem(cart_id), cart_elem(cart));
 }
 
-void remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm) {
+void ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm) {
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         ioopm_option_t value_to_remove = ioopm_hash_table_remove(ht_carts, int_elem(cart_id));
         cart_t *cart_to_remove = value_to_remove.value.cart;
@@ -384,7 +384,7 @@ void remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int
     }
 }
 
-bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
+bool ioopm_add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
     ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));
     ioopm_option_t cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
     
@@ -443,7 +443,7 @@ bool add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int
     }
 }
 
-bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
+bool ioopm_remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items) {
     ioopm_option_t the_cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
     if (the_cart.success == false) {
         printf("Cart not found!\n");
@@ -479,7 +479,7 @@ bool remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts
     return true;
 }
 
-bool checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, int cart_id) {
+bool ioopm_checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, int cart_id) {
     ioopm_option_t cart = ioopm_hash_table_lookup(ht_carts, int_elem(cart_id));
     if (cart.success == false) {
         printf("cart does not exist");
@@ -523,7 +523,7 @@ bool checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_
         
     }
     ioopm_linked_list_destroy(list_of_merchs);
-    remove_cart(ht_carts, ht_merch, cart_id, strdup("y"));
+    ioopm_remove_cart(ht_carts, ht_merch, cart_id, strdup("y"));
     return true;
 }
 
