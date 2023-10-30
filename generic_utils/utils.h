@@ -18,10 +18,10 @@
 
 /// @brief Data union to store different data types.
 typedef union {
-    int   int_value;      ///< Integer value.
-    float float_value;    ///< Floating-point value.
-    char *string_value;   ///< String value.
-    char  char_value;     ///< Character value.
+    int   int_value;      
+    float float_value;    
+    char *string_value;   
+    char  char_value;     
 } answer_t;
 
 /// Function pointer type for checking user input.
