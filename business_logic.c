@@ -10,20 +10,6 @@
 #include <ctype.h>
 
 
-// Destroy ht_stock
-/*
-static void entry_stock_destroy(entry_t *entry) {
-  // Cache the next pointer
-    entry_t *next = entry->next;
-    free(entry);
-  while (next != NULL) {
-   
-    free(next->value.string_value);
-    free(next);
-    next = next->next;
-  }
-}
-*/
 static void entry_stock_destroy(entry_t *entry) {
     entry_t *current = entry;
     while (current != NULL) {
@@ -37,14 +23,12 @@ static void entry_stock_destroy(entry_t *entry) {
 }
 
 void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht) {
-  // TODO 
   for (int i = 0; i < No_Buckets; i++) {
     entry_stock_destroy(ht->buckets[i]);
   }
   free(ht);
 }
 
-// Destroy ht_merch
 static void merch_links_destroy(ioopm_link_t *link) {
   // Cache the next pointer
   ioopm_link_t *next = link->next;
@@ -169,8 +153,28 @@ void list_merchandise(ioopm_hash_table_t *ht_merch) {
 }
 
 
-bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *ask_question)
+bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, char *ask_question_confirm, char *ask_question)
 {
+    ioopm_list_t *carts = ioopm_hash_table_values(ht_carts);
+    ioopm_link_t *cart = carts->first;
+    while (cart != NULL) {
+        ioopm_list_t *cart_merchs = ioopm_hash_table_keys(cart->element.cart->ht_cart_items);
+        ioopm_link_t *cart_m = cart_merchs->first;
+        while (cart_m != NULL) {
+            if (strcmp(ask_question, cart_m->element.string_value) == 0) {
+                printf("Trying to remove a merch which a shopping cart has, Error!\n");
+                free(ask_question_confirm);
+                free(ask_question);
+                ioopm_linked_list_destroy(carts);
+                ioopm_linked_list_destroy(cart_merchs);
+
+                return false;
+            }
+        }
+        ioopm_linked_list_destroy(cart_merchs);
+    }
+    ioopm_linked_list_destroy(carts);
+    
     if (ask_question_confirm[0] == 'y' || ask_question_confirm[0] == 'Y') {
         ioopm_option_t t_merch = ioopm_hash_table_remove(ht_merch, ptr_elem(ask_question));
 

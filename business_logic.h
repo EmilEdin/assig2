@@ -62,7 +62,7 @@ void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
 /// @param ht_stock The ht stock 
 /// @param ask_question Give a question
 /// @returns returns a boolean
-bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *ask_question_confirm, char *ask_question);
+bool remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, char *ask_question_confirm, char *ask_question);
 
 /// @brief edits a merch
 /// @param ht_merch The merch hash_table
