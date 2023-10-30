@@ -25,6 +25,10 @@
 /// @param ht_stock ht stock
 void ioopm_hash_stock_destroy(ioopm_hash_table_t *ht_stock);
 
+/// @brief Destroy the merch linked list
+/// @param list The linked list of a merch struct
+void ioopm_linked_merch_destroy(ioopm_list_t *list);
+
 /// @brief Destroy merch ht
 /// @param ht_merch ht merch
 void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
@@ -48,14 +52,6 @@ merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list
 /// @param ht_merch The merch hash_table
 /// @param merch The merch struct to be added.
 bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch);
-
-/// @brief Lists the number of merchandise up to 20 and more with input n.
-/// @param ht_merch The merch hash_table
-void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch);
-
-/// @brief Destroy the hash table with merch
-/// @param ht_merch The merch hash_table
-void ioopm_ht_merch_destroy(ioopm_hash_table_t *ht_merch);
 
 /// @brief Removes a merch
 /// @param ht_merch The merch hash_table
