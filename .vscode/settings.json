@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "hash_table.h": "c",
+    "__bit_reference": "c",
+    "bitset": "c",
+    "__memory": "c",
+    "limits": "c",
+    "ratio": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "vector": "c",
+    "chrono": "c"
+  }
+}
