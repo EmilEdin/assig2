@@ -10,17 +10,17 @@
 #include <ctype.h>
 #include "business_logic.h"
 
-int string_to_int(elem_t str)
+static int string_to_int(elem_t str)
 {
     return atoi(str.string_value);
 }
 
-char string_to_char(char *str)
+static char string_to_char(char *str)
 {
     return toupper(*str);
 }
 
-void print_menu(void)
+static void print_menu(void)
 {
     char *A = "Add Merchandise [A]\n";
     char *L = "List Merchandise [L]\n";
@@ -39,7 +39,7 @@ void print_menu(void)
     printf("%s%s%s%s%s%s%s%s%s%s%s%s%s", A, L, D, E, S, P, C, R, Ad, Su, Ca, O, Q);
 }
 
-bool check_letter(char *input_string)
+static bool check_letter(char *input_string)
 {
     if (strlen(input_string) > 1)
     {
@@ -71,11 +71,37 @@ bool check_letter(char *input_string)
     }
 }
 
-char ask_question_menu()
+static char ask_question_menu()
 {
     print_menu();
     char answer = ask_question("Select an option", check_letter, (convert_func)string_to_char).char_value;
     return answer;
+}
+
+void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch) {
+    ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
+    ioopm_link_t *current = list_of_merchs->first;
+    int i = 1;
+    while (current != NULL && i <= 20) {
+        printf("%d: %s\n", i, current->element.string_value);
+        current = current->next;
+        i = i + 1;
+    }
+    while (current != NULL) {
+        char *answer = ask_question_string("Continue listing?");
+        if (answer[0] == 'N' || answer[0] == 'n') {
+            free(answer);
+            int i = 0;
+            while (current != NULL && i < 20) {
+                printf("%d: %s\n", i, current->element.string_value);
+                current = current->next;
+            }
+        } else {
+            free(answer);
+        }
+    }
+    ioopm_linked_list_destroy(list_of_merchs);
+    
 }
 
 void calculate_cost(ioopm_hash_table_t *ht_carts, int cart_id)
