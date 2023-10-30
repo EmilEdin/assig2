@@ -135,32 +135,6 @@ bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch)
         return false;
     }
 }
-// Should be in interface
-void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch) {
-    ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(ht_merch);
-    ioopm_link_t *current = list_of_merchs->first;
-    int i = 1;
-    while (current != NULL && i <= 20) {
-        printf("%d: %s\n", i, current->element.string_value);
-        current = current->next;
-        i = i + 1;
-    }
-    while (current != NULL) {
-        char *answer = ask_question_string("Continue listing?");
-        if (answer[0] == 'N' || answer[0] == 'n') {
-            free(answer);
-            int i = 0;
-            while (current != NULL && i < 20) {
-                printf("%d: %s\n", i, current->element.string_value);
-                current = current->next;
-            }
-        } else {
-            free(answer);
-        }
-    }
-    ioopm_linked_list_destroy(list_of_merchs);
-    
-}
 
 int ioopm_show_stock(ioopm_hash_table_t *ht_merch, char *given_merch) {
     ioopm_option_t merch = ioopm_hash_table_lookup(ht_merch, ptr_elem(given_merch));

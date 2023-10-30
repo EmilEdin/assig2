@@ -20,13 +20,17 @@
  * @see $CANVAS_OBJECT_REFERENCE$/assignments/gb54499f3b7b264e3af3b68c756090f52
  */
 
-
-/// @brief Make a merch struct
-/// @param input_string the input string
-/// @return returns a boolean
-bool check_letter(char *input_string);
+/// @brief prints all merch items in the hash table
+/// @param ht_carts The hash_table of merch items
+void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch);
 
 /// @brief shows total cost of a cart
 /// @param ht_carts The carts hash_table
 /// @param cart_id The cart id
 void calculate_cost(ioopm_hash_table_t *ht_carts, int cart_id);
+
+/// @brief displays a number of options that the user has and lets them pick from them
+/// @param ht_merch The hash_table of merch items
+/// @param ht_stock The hash_table of items in stock
+/// @param ht_carts The hash_table of carts
+void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts);
