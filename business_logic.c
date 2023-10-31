@@ -62,13 +62,13 @@ void ioopm_linked_merch_destroy(ioopm_list_t *list) {
 
 static void merch_linked_destroy(ioopm_hash_table_t *ht_merch) {
     ioopm_list_t *all_merchs = ioopm_hash_table_values(ht_merch);
-    ioopm_link_t *t = all_merchs->first;
-    while (t != NULL) {
-        ioopm_linked_merch_destroy(t->element.merch->list);
-        free(t->element.merch->name);
-        free(t->element.merch->description);
-        free(t->element.merch);
-        t = t->next;
+    ioopm_link_t *merch = all_merchs->first;
+    while (merch != NULL) {
+        ioopm_linked_merch_destroy(merch->element.merch->list);
+        free(merch->element.merch->name);
+        free(merch->element.merch->description);
+        free(merch->element.merch);
+        merch = merch->next;
     }
     ioopm_linked_list_destroy(all_merchs);
 }
