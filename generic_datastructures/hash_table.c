@@ -8,7 +8,6 @@
 #include "linked_list.h"
 
 
-
 static bool int_compare(elem_t a, elem_t b) { return a.int_value == b.int_value;}
 
 static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)

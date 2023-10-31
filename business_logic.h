@@ -89,6 +89,7 @@ int ioopm_show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 
 /// @brief Replenish merchandise stock.
 /// This function adds items to the stock of a merchandise item.
+///        Precondition: items must be a natural number of positive integers
 /// @param ht_merch The merchandise hash table.
 /// @param ht_stock The stock hash table.
 /// @param storage_id The shelf identifier.
