@@ -330,7 +330,7 @@ bool ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merc
         }
         cart_t *cart_to_remove = value_to_remove.value.cart;
         ioopm_list_t *merch_list = ioopm_hash_table_keys(cart_to_remove->ht_cart_items);
-        for(int i = 0; i < ioopm_linked_list_size(merch_list); i++) {
+        for (int i = 0; i < ioopm_linked_list_size(merch_list); i++) {
             ioopm_option_t option_to_restore = ioopm_hash_table_lookup(ht_merch, ioopm_linked_list_get(merch_list, i));
             merch_t *merch_to_restore = option_to_restore.value.merch;
             ioopm_option_t lookup_result = ioopm_hash_table_lookup(cart_to_remove->ht_cart_items, ptr_elem(merch_to_restore->name));
