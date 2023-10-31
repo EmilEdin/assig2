@@ -66,7 +66,7 @@ merch_t *make_merch(char *name, char *description, int price, ioopm_list_t *list
 ///
 /// @param ht_merch The merchandise hash table.
 /// @param merch The merchandise structure to be added.
-/// @return true if the merchandise was successfully added; false otherwise.
+/// @return true if the merchandise was successfully added, false otherwise.
 bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch);
 
 /// @brief Remove merchandise from the system.
@@ -79,7 +79,7 @@ bool ioopm_add_merch(ioopm_hash_table_t *ht_merch, merch_t *merch);
 /// @param ht_carts The shopping cart hash table.
 /// @param ask_question_confirm Confirmation message.
 /// @param ask_question Additional question or information.
-/// @return true if the merchandise was successfully removed; false otherwise.
+/// @return true if the merchandise was successfully removed, false otherwise.
 bool ioopm_remove_merch(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, char *ask_question_confirm, char *ask_question);
 
 /// @brief Edit merchandise details.
@@ -115,7 +115,7 @@ int ioopm_show_stock(ioopm_hash_table_t *ht_merch, char *given_merch);
 /// @param storage_id The shelf identifier.
 /// @param given_merch The merchandise item to add stock to.
 /// @param items The number of items to add to stock.
-/// @return true if stock replenishment was successful; false otherwise.
+/// @return true if stock replenishment was successful, false otherwise.
 bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, char *storage_id, char *given_merch, int items);
 
 /// @brief Create a new shopping cart in the system.
@@ -134,7 +134,7 @@ void ioopm_create_cart(ioopm_hash_table_t *ht_carts, int cart_id);
 /// @param ht_merch The merchandise hash table.
 /// @param cart_id The identifier of the cart to remove.
 /// @param ask_question_confirm Confirmation message.
-/// @return true if the cart was successfully removed; false otherwise.
+/// @return true if the cart was successfully removed, false otherwise.
 bool ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merch, int cart_id, char *ask_question_confirm);
 
 /// @brief Add merchandise to a shopping cart.
@@ -146,7 +146,7 @@ bool ioopm_remove_cart(ioopm_hash_table_t *ht_carts, ioopm_hash_table_t *ht_merc
 /// @param cart_id The identifier of the cart to which merchandise is added.
 /// @param given_merch The name of the merchandise to add to the cart.
 /// @param num_of_items The number of items to add to the cart.
-/// @return true if the merchandise was successfully added to the cart; false otherwise.
+/// @return true if the merchandise was successfully added to the cart, false otherwise.
 bool ioopm_add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items);
 
 /// @brief Remove merchandise from a shopping cart.
@@ -158,7 +158,7 @@ bool ioopm_add_to_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_cart
 /// @param cart_id The identifier of the cart from which merchandise is removed.
 /// @param given_merch The name of the merchandise to remove from the cart.
 /// @param num_of_items The number of items to remove from the cart.
-/// @return true if the merchandise was successfully removed from the cart; false otherwise.
+/// @return true if the merchandise was successfully removed from the cart, false otherwise.
 bool ioopm_remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_carts, int cart_id, char *given_merch, int num_of_items);
 
 /// @brief Perform the checkout process.
@@ -170,5 +170,5 @@ bool ioopm_remove_from_cart(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht
 /// @param ht_stock The stock hash table.
 /// @param ht_carts The shopping cart hash table.
 /// @param cart_id The identifier of the cart to checkout.
-/// @return true if the checkout was successful; false otherwise.
+/// @return true if the checkout was successful, false otherwise.
 bool ioopm_checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioopm_hash_table_t *ht_carts, int cart_id);

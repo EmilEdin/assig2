@@ -1,25 +1,44 @@
-main: hash_test
-    valgrind --leak-check=full ./hash_test
-
 C_COMPILER     = gcc
-C_OPTIONS      = -Wall -pedantic -g -I /usr/include/CUnit
-C_LINK_OPTIONS = -lm  
+C_OPTIONS      = -Wall -g
+C_LINK_OPTIONS = -lm
 C_LINK_CUNIT = -lcunit
 
-%.o:  generic_datastructures/%.c
-    $(C_COMPILER) $(C_OPTIONS) $^ -c
-
-%.o:  generic_utils/%.c
-    $(C_COMPILER) $(C_OPTIONS) $^ -c
-
-%.o:  %.c
-    $(C_COMPILER) $(C_OPTIONS) $^ -c
+test_logic: hash_test
+	valgrind ./hash_test
 
 hash_test: test.o business_logic.o hash_table.o linked_list.o utils.o
-    $(C_COMPILER) $(C_LINK_OPTIONS) $^ -o $@ $(C_LINK_CUNIT)
+	$(C_COMPILER) $(C_OPTIONS) test.o business_logic.o hash_table.o linked_list.o utils.o -o hash_test $(C_LINK_CUNIT)
 
-hash_test.final: test.o business_logic.o hash_table.o linked_list.o utils.o
+assig2: user_interface
+	./assig2
 
+assig2_v: user_interface
+	valgrind --leak-check=full ./assig2
 
-clean:
-    rm -f *.o hash_test
+user_interface: user_interface.o business_logic.o hash_table.o linked_list.o utils.o
+	$(C_COMPILER) $(C_OPTIONS) user_interface.o business_logic.o hash_table.o linked_list.o utils.o -o assig2
+
+user_interface.o: user_interface.c 
+	$(C_COMPILER) $(C_OPTIONS) -c user_interface.c 
+
+hash_table.o: generic_datastructures/hash_table.c
+	$(C_COMPILER) $(C_OPTIONS) -c generic_datastructures/hash_table.c
+
+linked_list.o: generic_datastructures/linked_list.c
+	$(C_COMPILER) $(C_OPTIONS) -c generic_datastructures/linked_list.c
+
+utils.o: generic_utils/utils.c
+	$(C_COMPILER) $(C_OPTIONS) -c generic_utils/utils.c
+
+test.o: test.c
+	$(C_COMPILER) $(C_OPTIONS) -c test.c
+
+business_logic.o: business_logic.c
+	$(C_COMPILER) $(C_OPTIONS) -c business_logic.c
+
+clean_test:
+	rm test.o business_logic.o hash_table.o linked_list.o utils.o hash_test
+
+clean_assig2:
+	rm user_interface.o business_logic.o hash_table.o linked_list.o utils.o assig2
+

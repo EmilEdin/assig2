@@ -1,16 +1,15 @@
 # assig2
 
 # How to run the program
-*make test
-    Runs freq-count.c with all 4 different .txt files, given by the course, through valgrind 
+*make test_logic
+    Runs the cunit tests in test.c file through valgrind
+*make clean_test
 
-gcc -g -Wall generic_datastructures/hash_table.c generic_datastructures/linked_list.c generic_utils/utils.c  test.c business_logic.c -o hash_test -lcunit
-
-
-// For trying user interface program game
-gcc -g -Wall generic_datastructures/hash_table.c generic_datastructures/linked_list.c generic_utils/utils.c business_logic.c user_interface.c -o assig2
-
-multipass exec primary -- bash   
+*make assig2
+    Runs the webstore backend simulation
+*make assig2_v
+    Runs the webstore backend simulation through valgrind
+*make clean_assig2
 
 /* Line and branch coverage using gcov */
 * business_logic.c 99.09% 
