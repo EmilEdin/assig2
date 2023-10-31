@@ -21,9 +21,7 @@
  */
 
 /// @brief Create a new merchandise structure.
-///
 /// This function initializes and returns a new merchandise structure.
-///
 /// @return A pointer to the newly created merchandise structure.
 merch_t *input_merch(void);
 
