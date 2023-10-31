@@ -11,8 +11,6 @@
 #define shelf_elem(x) (elem_t) { .shelf=(x) }
 #define cart_elem(x) (elem_t) { .cart=(x) }
 
-
-
 typedef struct merch merch_t;
 typedef struct shelf shelf_t;
 typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
@@ -34,8 +32,6 @@ struct shelf
     int quantity;
 };
 
-
-
 typedef union { 
   int   int_value;
   char *string_value;
@@ -45,16 +41,11 @@ typedef union {
   cart_t *cart;
 } elem_t;
 
-
-
 typedef int (*hash_function)(elem_t key);
-
 /// Compares two elements and returns true if they are equal
 typedef bool(*ioopm_eq_function)(elem_t a, elem_t b);
 
-
 // Linked_list
-
 typedef struct iter ioopm_list_iterator_t;
 typedef bool(*ioopm_int_predicate)(elem_t value, void *extra);
 typedef void(*ioopm_apply_int_function)(elem_t *value, void *extra);
@@ -85,8 +76,6 @@ struct list
 typedef bool(*ioopm_predicate)(elem_t key, elem_t value, void *arg, bool extra);
 typedef void(*ioopm_apply_function)(elem_t key, elem_t value, void *extra);
 
-
-
 typedef struct entry entry_t;
 typedef struct option ioopm_option_t;
 typedef struct hash_table ioopm_hash_table_t;
@@ -111,7 +100,6 @@ struct option
   bool success;
   elem_t value;
 };
-
 
 struct cart
 {
