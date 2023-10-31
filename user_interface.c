@@ -10,9 +10,15 @@
 #include <ctype.h>
 #include "business_logic.h"
 
-static int string_to_int(elem_t str)
-{
-    return atoi(str.string_value);
+static int string_to_int(elem_t str) {
+  int counter = 0;
+  int value = 0;
+  char *st = str.string_value;
+  while (st[counter] != '\0') {
+    value = value + st[counter];
+    counter = counter + 1;
+  }
+  return value;
 }
 
 static char string_to_char(char *str)
