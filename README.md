@@ -11,10 +11,21 @@
     Runs the webstore backend simulation through valgrind
 *make clean_assig2
 
+How to run gcov:
+// Test coverage
+Compile: gcc -g -Wall -fprofile-arcs -ftest-coverage generic_datastructures/hash_table.c generic_datastructures/linked_list.c generic_utils/utils.c test.c business_logic.c -o test_gcov -lcunit
+Run the program: ./test_gcov
+gcov test_gcov-business_logic.gcda
+// User interface coverage
+Compile: gcc -g -Wall -fprofile-arcs -ftest-coverage generic_datastructures/hash_table.c generic_datastructures/linked_list.c generic_utils/utils.c business_logic.c user_interface.c -o user_gcov -lcunit
+Run the program: ./user_gcov
+gcov user_gcov-user_interface.gcda
+
 /* Line and branch coverage using gcov */
 * business_logic.c 99.09% 
+* user_interface.c 100%
 
- # Brief program documentation
+# Brief program documentation
  * The program is divided into four modules, the first one is the datastructures used to store data (generic_datastructures)
  * The second one handles the user data in form of inputs (generic_utils)
  * The third one handles the backend logic for the webstore (business_logic)

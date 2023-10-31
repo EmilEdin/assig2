@@ -31,10 +31,8 @@ typedef bool (*check_func)(char *);
 typedef answer_t (*convert_func)(char *);
 
 /// @brief Ask a question and validate user input.
-///
 /// This function asks a question to the user, validates the input using the provided
 /// check and convert functions, and returns the result.
-///
 /// @param question The question to ask the user.
 /// @param check A function to validate the user's input.
 /// @param convert A function to convert the validated input.
@@ -42,28 +40,22 @@ typedef answer_t (*convert_func)(char *);
 answer_t ask_question(char *question, check_func check, convert_func convert);
 
 /// @brief Ask a question and validate the user input as a string.
-///
 /// This function asks a question to the user, validates the input as a non-empty string,
 /// and returns the result.
-///
 /// @param question The question to ask the user.
 /// @return The validated string input from the user.
 char *ask_question_string(char *question);
 
 /// @brief Ask a question and validate the user input as an integer.
-///
 /// This function asks a question to the user, validates the input as an integer,
 /// and returns the result.
-///
 /// @param question The question to ask the user.
 /// @return The validated integer input from the user.
 int ask_question_int(char *question);
 
 /// @brief Ask a question and validate the user input as a shelf identifier.
-///
 /// This function asks a question to the user, validates the input as a valid shelf identifier,
 /// and returns the result.
-///
 /// @param question The question to ask the user.
 /// @return The validated shelf identifier input from the user.
 char *ask_question_shelf(char *question);

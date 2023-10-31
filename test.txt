@@ -3,4 +3,41 @@ Kritor
 Vita kritor
 20
 L
+E
+Kritor
+Svarta kritor
+30
+y
+L
+D
+Kritor
+y
+A
+Bilbräcka
+En bräcka för att angripa andra bilar med
+420
+P
+A24
+Bilbräcka
+69
+S
+C
++
+0
+Bilbräcka
+12
+-
+0
+Bilbräcka
+6
+R
+y
+0
+C
++
+0
+Bilbräcka
+45
+O
+0
 Q
