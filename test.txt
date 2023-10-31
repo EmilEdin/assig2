@@ -4,11 +4,14 @@ Vita kritor
 20
 L
 E
+3
 Kritor
 Svarta kritor
 30
 y
 L
+=
+0
 D
 Kritor
 y
@@ -22,6 +25,7 @@ Bilbräcka
 69
 S
 C
+=
 +
 0
 Bilbräcka
@@ -38,6 +42,207 @@ C
 0
 Bilbräcka
 45
+O
+0
+A
+Kritorr
+Vita kritorr
+20
+A
+aKritor
+aVita kritor
+20
+A
+Britor
+Bita kritor
+20
+A
+Critor
+Cita kritor
+20
+A
+Sritor
+Sita kritor
+20
+A
+Sritors
+Sita kritors
+20
+A
+Sritorss
+Sita kritorss
+20
+A
+Sritorssss
+Sita kritorssss
+20
+A
+Sritorasd
+Sita kritorasd
+20
+A
+Sritorasd
+Sita kritorasd
+20
+A
+Sritorasdasd
+Sita kritorasdasd
+20
+A
+Sritor
+Sita kritor
+20
+A
+asdSritor
+sdfSita kritor
+20
+A
+Sasdfsdafritor
+Siasdfsadfta kritor
+20
+A
+Sriasdasdffasdfasdftor
+Sita kritor
+20
+A
+Sritorasd
+Sita kritor
+20
+A
+Sritorasqweqwe
+Sita kritor
+20
+A
+Sritoraspdokaspdo
+Sita kritor
+20
+A
+Sritorpkoqwpoqkwdopqkd
+Sita kritor
+20
+A
+Sritorqwesdpfoksdfpodsfkop
+Sita kritor
+20
+A
+Sritorpasodksaopdakosda
+Sita kritor
+20
+A
+Sritorpasodksaopdakosdaasdasdasdasd
+Sita kritor
+20
+A
+Sritorpasodksaopdakosdasaldfsaöldfksdaölfköl
+Sita kritor
+20
+A
+Sritorpasodksaopdakosdaqweuioqweuio
+Sita kritor
+20
+A
+Sritorpasodksaopdakosdaqweiqjwhdiuhasaiud
+Sita kritor
+20
+A
+Sritorpasodksaopdakosdaasdhasiudhasudi
+Sita kritor
+20
+A
+Sritorpasodksawqjasiodjoasdjoiasjdopdakosda
+Sita kritor
+20
+A
+Sritorpasodksaqwsadihdasiuhdasuidhopdakosda
+Sita kritor
+20
+A
+Sritorpasodkaisojdiasdjqzxcnsasaopdakosda
+Sita kritor
+20
+L
+N
+F
+12
+A
+Adam
+En människa
+50
+E
+Adam
+Emil
+En människa
+200
+y
+E
+Emil
+Sritorpasodkaisojdiasdjqzxcnsasaopdakosda
+asdasd
+50
+y
+L
+F
+A
+Kritor
+Vita kritor
+20
+L
+E
+Kritor
+Svarta kritor
+30
+y
+L
+D
+Fossor
+y
+D
+Kritor
+y
+A
+Bilbräcka
+En bräcka för att angripa andra bilar med
+420
+P
+Grodor
+56
+P
+A24
+Bilbräcka
+0
+P
+A24
+Bilbräcka
+69
+S
+C
++
+0
+Bilbräcka
+12
++
+1
+Bilbräcka
+2
+-
+0
+Bilbräcka
+6
+R
+y
+1
+R
+y
+0
+C
++
+0
+Bilbräcka
+45
+=
+1
+=
+0
 O
 0
 Q

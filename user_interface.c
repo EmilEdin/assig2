@@ -112,6 +112,7 @@ void ioopm_list_merchandise(ioopm_hash_table_t *ht_merch) {
             }
         } else {
             free(answer);
+            break;
         }
     }
     ioopm_linked_list_destroy(list_of_merchs);

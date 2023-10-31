@@ -23,7 +23,7 @@ gcov user_gcov-user_interface.gcda
 
 /* Line and branch coverage using gcov */
 * business_logic.c 99.09% 
-* user_interface.c 100%
+* user_interface.c 97.44%
 
 # Brief program documentation
  * The program is divided into four modules, the first one is the datastructures used to store data (generic_datastructures)
