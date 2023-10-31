@@ -210,7 +210,9 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioop
         else if (answer == 'C')
         {
             ioopm_create_cart(ht_carts, cart_id);
+            printf("Created cart with id: %d", cart_id);
             cart_id = cart_id + 1;
+            
         }
         else if (answer == 'R')
         {
