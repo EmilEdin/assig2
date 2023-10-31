@@ -39,3 +39,7 @@ ht_carts
 * A value is a cart_t struct consisting of two fields, total cost which is the total cost of the merchandise items added to the cart
 and another hashtable which stores all of the merchandise added to the cart as key and the corresponding value is the quantity added
 
+1. Hash table comes from Thomas’s Assignment 1
+2. Linked list comes from Emil’s Assignment 1
+3. Utils comes from Eskil’s C bootstrap labs
+
