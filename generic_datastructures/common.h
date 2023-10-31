@@ -105,5 +105,4 @@ struct cart
 {
   ioopm_hash_table_t *ht_cart_items;
   int total_cost;
-
 };

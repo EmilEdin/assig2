@@ -199,6 +199,8 @@ void event_loop(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, ioop
             if (items < 1)
             {
                 printf("Too few items!");
+                free(shelf);
+                free(merch);
             }
             else if (ioopm_replenish(ht_merch, ht_stock, shelf, merch, items) == false)
             {

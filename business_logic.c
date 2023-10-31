@@ -293,12 +293,15 @@ bool ioopm_replenish(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock,
             ioopm_hash_table_insert(ht_stock, ptr_elem(storage_id), ptr_elem(given_merch));
             
             ioopm_list_t *merch_list_2 = merch_2.value.merch->list;
-                   
+           
+            
+            int i = ioopm_linked_list_size(merch_list_2);
             // Now we are at the end of the list, add shelf
             shelf_t *new_shelf = calloc(1, sizeof(shelf_t));
             new_shelf->quantity = items;
             new_shelf->shelf = storage_id;
-            ioopm_linked_list_append(merch_list_2, shelf_elem(new_shelf));
+
+            ioopm_linked_list_insert(merch_list_2, i, shelf_elem(new_shelf));
             
             // Add items to cart struct too
             merch_2.value.merch->items_tracker = merch_2.value.merch->items_tracker + items;
@@ -455,14 +458,13 @@ bool ioopm_checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, 
         printf("cart does not exist");
         return false;
     }
-    
+
     ioopm_list_t *list_of_merchs = ioopm_hash_table_keys(cart.value.cart->ht_cart_items);
     ioopm_link_t *link_merchs = list_of_merchs->first;
     while (link_merchs != NULL) {
         ioopm_option_t merch_lookup = ioopm_hash_table_lookup(ht_merch, ptr_elem(link_merchs->element.string_value));
         ioopm_option_t quantity_lookup = ioopm_hash_table_lookup(cart.value.cart->ht_cart_items, ptr_elem(link_merchs->element.string_value));
         // Remove merch items from htstock and htmerch
- 
         int index_in_list = 0;
         ioopm_list_t *list_of_shelf = merch_lookup.value.merch->list;
         ioopm_link_t *the_merch_shelfs = list_of_shelf->first;
@@ -472,7 +474,6 @@ bool ioopm_checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, 
                 int the_merch_shelf_quantity = the_merch_shelfs->element.shelf->quantity;
                 the_merch_shelfs = the_merch_shelfs->next;
                 shelf_t *shelf = ioopm_linked_list_remove(list_of_shelf, index_in_list).shelf;
-                index_in_list = index_in_list + 1;
                 // Here we need to remove it from ht_stock
                 ioopm_option_t merch = ioopm_hash_table_remove(ht_stock, ptr_elem(shelf->shelf));
                 free(merch.value.string_value);
@@ -485,8 +486,9 @@ bool ioopm_checkout(ioopm_hash_table_t *ht_merch, ioopm_hash_table_t *ht_stock, 
                 the_merch_shelfs->element.shelf->quantity = the_merch_shelfs->element.shelf->quantity - quantity_lookup.value.int_value;
                 
                 // Decrease the total quantity by the specific shelf quantity
-                quantity_lookup.value.int_value = quantity_lookup.value.int_value - the_merch_shelfs->element.shelf->quantity;
+                quantity_lookup.value.int_value = 0;
                 the_merch_shelfs = the_merch_shelfs->next;
+                
             }
         }
         link_merchs = link_merchs->next;

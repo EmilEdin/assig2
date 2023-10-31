@@ -4,7 +4,7 @@ C_LINK_OPTIONS = -lm
 C_LINK_CUNIT = -lcunit
 
 test_logic: hash_test
-	valgrind ./hash_test
+	valgrind --leak-check=full ./hash_test
 
 hash_test: test.o business_logic.o hash_table.o linked_list.o utils.o
 	$(C_COMPILER) $(C_OPTIONS) test.o business_logic.o hash_table.o linked_list.o utils.o -o hash_test $(C_LINK_CUNIT)

@@ -12,8 +12,6 @@
 #include "business_logic.h"
 
 
-
-
 bool string_eq(elem_t arg1, elem_t arg2) {
   return strcmp(arg1.string_value, arg2.string_value);
 }
@@ -435,6 +433,41 @@ void test_ioopm_checkout(void) {
   ioopm_hash_table_carts_destroy(ht_carts);
 }
 
+void test_edge_cases(void) {
+  ioopm_hash_table_t *ht_merch = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_stock = ioopm_hash_table_create(string_to_int, NULL);
+  ioopm_hash_table_t *ht_carts = ioopm_hash_table_create(NULL, NULL);
+
+  merch_t *merch_10 = make_merch(strdup("Boll"), strdup("En boll"), 100, ioopm_linked_list_create(NULL));
+  ioopm_add_merch(ht_merch, merch_10);
+  merch_t *merch_11 = make_merch(strdup("Bröd"), strdup("En bröd"), 1050, ioopm_linked_list_create(NULL));
+  ioopm_add_merch(ht_merch, merch_11);
+
+  char *p = strdup("D10");
+  char *ab = strdup("Boll");
+  ioopm_replenish(ht_merch, ht_stock, p, ab, 100);
+  ioopm_replenish(ht_merch, ht_stock, strdup("B10"), strdup("Boll"), 150);
+  ioopm_replenish(ht_merch, ht_stock, strdup("A31"), strdup("Bröd"), 50);
+  ioopm_replenish(ht_merch, ht_stock, strdup("O67"), strdup("Bröd"), 20);
+  ioopm_replenish(ht_merch, ht_stock, strdup("L32"), strdup("Boll"), 250);
+  ioopm_replenish(ht_merch, ht_stock, strdup("I42"), strdup("Bröd"), 10);
+  ioopm_replenish(ht_merch, ht_stock, strdup("P10"), strdup("Boll"), 100);
+  ioopm_create_cart(ht_carts, 5);
+  ioopm_create_cart(ht_carts, 3);
+  ioopm_add_to_cart(ht_merch, ht_carts, 5, strdup("Boll"), 500);
+  ioopm_add_to_cart(ht_merch, ht_carts, 5, strdup("Bröd"), 79);
+  ioopm_add_to_cart(ht_merch, ht_carts, 3, strdup("Bröd"), 1);
+  ioopm_remove_from_cart(ht_merch, ht_carts, 5, strdup("Boll"), 200);
+  ioopm_add_to_cart(ht_merch, ht_carts, 5, strdup("Boll"), 200);
+  
+  ioopm_show_stock(ht_merch, strdup("Boll"));
+  
+  ioopm_checkout(ht_merch, ht_stock, ht_carts, 5);
+
+  ioopm_ht_merch_destroy(ht_merch);
+  ioopm_hash_stock_destroy(ht_stock);
+  ioopm_hash_table_carts_destroy(ht_carts);
+}
 
 int main() {
 
@@ -465,6 +498,7 @@ int main() {
     (CU_add_test(my_test_suite, "Test add_to_cart", test_ioopm_add_to_cart) == NULL) ||
     (CU_add_test(my_test_suite, "Test remove_from_cart", test_ioopm_remove_from_cart) == NULL) || 
     (CU_add_test(my_test_suite, "Test checkout", test_ioopm_checkout) == NULL) || 
+    (CU_add_test(my_test_suite, "Test edge cases", test_edge_cases) == NULL) || 
     0
   )
     {
