@@ -1,0 +1,13 @@
+Please enter an expression: 
+Please enter an expression: 
+Please enter an expression: 
+Please enter an expression: 
+Please enter an expression: 
+Please enter an expression: 
+Result: 7.0
+Please enter an expression: 
+Exiting the calculator. Goodbye!
+Statistics:
+Total expressions entered: 7
+Successfully evaluated expressions: 1
+Fully evaluated expressions: 1

@@ -1,0 +1,12 @@
+Please enter an expression: 
+Please enter an expression:
+Please enter an expression:
+Please enter an expression:
+Please enter an expression:
+Result: 2.43290200817664E18
+Please enter an expression: 
+Exiting the calculator. Goodbye!
+Statistics:
+Total expressions entered: 6
+Successfully evaluated expressions: 1
+Fully evaluated expressions: 1
